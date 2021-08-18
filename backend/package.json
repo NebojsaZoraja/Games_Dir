@@ -1,0 +1,34 @@
+{
+  "name": "games-dir",
+  "version": "1.0.0",
+  "description": "Web application used to sell games online",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "14.17.4"
+  },
+  "author": "Nebojsa Zoraja",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "compression": "^1.7.4",
+    "config": "^3.3.6",
+    "debug": "^4.3.2",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "helmet": "^4.6.0",
+    "joi": "^17.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^5.13.5",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.3",
+    "multer-gridfs-storage": "^5.0.1",
+    "pug": "^3.0.2",
+    "winston": "^3.3.3",
+    "winston-mongodb": "^5.0.7"
+  }
+}
