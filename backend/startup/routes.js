@@ -4,7 +4,6 @@ const games = require('../routes/games');
 const users = require('../routes/users');
 const auth = require('../routes/auth')
 const home = require('../routes/home');
-const web = require('../routes/web')
 const error = require('../middleware/error');
 
 module.exports = function (app) {

@@ -44,7 +44,12 @@ router.post('/', async (req, res) => {
         },
         price: req.body.price,
         tags: req.body.tags,
-        totalPurchases: 0
+        totalPurchases: 0,
+        image: req.body.image,
+        description: req.body.description,
+        rating: req.body.rating,
+        numberInStock: req.body.numberInStock,
+        numReviews: req.body.numReviews
     });
 
     game = await game.save();

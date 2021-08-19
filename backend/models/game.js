@@ -30,10 +30,33 @@ const gameSchema = mongoose.Schema({
         type: Array,
         required: true
     },
+    image: {
+        type: String,
+        required: true
+    },
     totalPurchases: {
         type: Number,
         min: 0
     },
+    rating: {
+        type: Number,
+        min: 0,
+        max: 5,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    numberInStock: {
+        type: Number,
+        min: 0,
+        max: 100,
+        required: true
+    },
+    numReviews: {
+        type: Number
+    }
 });
 
 const Game = new mongoose.model('Game', gameSchema);
@@ -45,7 +68,12 @@ function validateGame(game) {
         genreId: Joi.string().required(),
         price: Joi.number().min(0).max(255).required(),
         tags: Joi.array().min(1).max(255).required(),
+        image: Joi.string().required(),
         totalPurchases: Joi.number().min(0),
+        rating: Joi.number().min(0).max(5).required(),
+        description: Joi.string().required(),
+        numberInStock: Joi.number().min(0).max(100).required(),
+        numReviews: Joi.number()
     });
 
     return schema.validate(game);

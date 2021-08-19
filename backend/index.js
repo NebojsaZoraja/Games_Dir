@@ -6,6 +6,7 @@ require('./startup/db')();
 require('./startup/logging')();
 require('./startup/config')()
 require('./startup/prod')(app);
+require('./startup/env')();
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", '*');
@@ -14,5 +15,6 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
     next();
 });
+
 
 app.listen(process.env.PORT || 5000, () => winston.info(`Listening on port ${process.env.PORT}`));
