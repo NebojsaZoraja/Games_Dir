@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Image,
+  ListGroup,
+  Card,
+  Button,
+  Container,
+} from "react-bootstrap";
 import Rating from "../components/Rating";
 import axios from "axios";
 
@@ -17,7 +25,7 @@ const ProductScreen = ({ match }) => {
   }, [match.params.id]);
 
   return (
-    <>
+    <Container>
       <Link
         className="btn btn-light my-3"
         to="/"
@@ -25,57 +33,55 @@ const ProductScreen = ({ match }) => {
       >
         Go back
       </Link>
-      <Row md={2}>
-        <Col md={6}>
-          <Image src={product.image} alt={product.title} fluid />
+      <Row className="justify-content-center my-2">
+        <Col md={8} lg={6} xs={12}>
+          <Image
+            src={product.image}
+            alt={product.title}
+            style={{ height: "100%", width: "100%" }}
+            fluid
+          />
         </Col>
-        <Card className="w-auto my-3">
-          <Col
-            md={2}
-            className="mx-2 my-3"
-            style={{ width: "20em", textAlign: "center" }}
-          >
-            <ListGroup variant="flush">
-              <ListGroup.Item>
-                <Row>
-                  <Col as="h4">Price:</Col>
-                  <Col as="h4">
-                    <strong>${product.price}</strong>
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col as="h4">Status:</Col>
-                  <Col as="h4">
-                    <strong>
-                      {product.numberInStock > 0 ? "In Stock" : "Out Of Stock"}
-                    </strong>
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Button
-                    className="btn-block"
-                    type="button"
-                    disabled={product.numberInStock === 0}
-                  >
-                    {product.numberInStock > 0 ? "Add To Cart" : "Out Of Stock"}
-                  </Button>
-                </Row>
-              </ListGroup.Item>
-            </ListGroup>
-          </Col>
-        </Card>
+        <Col md={4} lg={3} xs={12} className="mt-2">
+          <ListGroup variant="flush" style={{ width: "100%" }}>
+            <ListGroup.Item>
+              <Row style={{ textAlign: "center" }}>
+                <Col as="h5">Price:</Col>
+                <Col as="h5">
+                  <strong>${product.price}</strong>
+                </Col>
+              </Row>
+              <Row as="h5" className="mt-3 " style={{ textAlign: "center" }}>
+                <strong>Status:</strong>
+              </Row>
+              <Row as="h4" style={{ textAlign: "center" }}>
+                <strong>
+                  {product.numberInStock > 0 ? "In Stock" : "Out Of Stock"}
+                </strong>
+              </Row>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Row>
+                <Button
+                  style={{
+                    backgroundColor: "dodgerblue",
+                    borderColor: "dodgerblue",
+                  }}
+                  type="button"
+                  disabled={product.numberInStock === 0}
+                >
+                  {product.numberInStock > 0 ? "Buy now" : "Out Of Stock"}
+                </Button>
+              </Row>
+            </ListGroup.Item>
+          </ListGroup>
+        </Col>
       </Row>
-      <Row className="py-2">
+      <Row className="justify-content-md-center">
         <Col lg={10}>
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h3>{product.title}</h3>
-            </ListGroup.Item>
-            <ListGroup.Item>
               <Rating
                 value={product.rating}
                 text={`${product.numReviews} reviews`}
@@ -85,7 +91,7 @@ const ProductScreen = ({ match }) => {
           </ListGroup>
         </Col>
       </Row>
-    </>
+    </Container>
   );
 };
 
