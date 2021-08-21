@@ -10,13 +10,12 @@ const { Genre } = require('../models/genre');
 
 router.get('/', async (req, res) => {
     let games = await Game.find().sort('title');
-    res.header("Access-Control-Allow-Origin", "*")
     res.send(games);
 });
 
 //GET:ID
 
-router.get('/:id', [auth, admin], async (req, res) => {
+router.get('/:id', async (req, res) => {
     const game = await Game.findById(req.params.id);
 
     if (!game) return res.status(404).send("The game with the given ID was not found.");
@@ -26,7 +25,7 @@ router.get('/:id', [auth, admin], async (req, res) => {
 
 //POST
 
-router.post('/', async (req, res) => {
+router.post('/', [auth, admin], async (req, res) => {
     const { error } = validate(req.body);
     if (error) {
         return res.status(400).send(error.message);

@@ -42,7 +42,8 @@ const gameSchema = mongoose.Schema({
         type: Number,
         min: 0,
         max: 5,
-        required: true
+        required: true,
+        default: 0
     },
     description: {
         type: String,
@@ -55,7 +56,9 @@ const gameSchema = mongoose.Schema({
         required: true
     },
     numReviews: {
-        type: Number
+        type: Number,
+        required: true,
+        default: 0
     }
 });
 

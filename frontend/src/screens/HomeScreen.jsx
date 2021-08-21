@@ -1,52 +1,61 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Col, Row, Carousel, Image, Container } from "react-bootstrap";
 import Product from "../components/Product";
-import axios from "axios";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 import { Link } from "react-router-dom";
+import { listGames } from "../actions/gameActions";
 
 const HomeScreen = () => {
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
 
+  const gameList = useSelector((state) => state.gameList);
+  const { loading, error, games } = gameList;
+  const discountGames = [];
+  games.forEach((game) => (game.price <= 10 ? discountGames.push(game) : null));
   useEffect(() => {
-    const fetchProducts = async () => {
-      const { data } = await axios.get("/api/games");
-
-      setProducts(data);
-    };
-    fetchProducts();
-  }, []);
+    dispatch(listGames());
+  }, [dispatch]);
 
   return (
     <>
-      <h1>Latest Products</h1>
+      <h1>Latest Games</h1>
       <Container>
-        <Row>
-          <Col>
-            <Carousel>
-              {products.map((product) => (
-                <Carousel.Item key={product._id}>
-                  <Link
-                    to={`/product/${product._id}`}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Image
-                      src={product.image}
-                      alt={product.title}
-                      className="d-block w-100"
-                    />
-                  </Link>
-                </Carousel.Item>
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message variant="danger">{error}</Message>
+        ) : (
+          <>
+            <Row className="justify-content-center">
+              <Carousel>
+                {discountGames.map((game) => (
+                  <Carousel.Item key={game._id}>
+                    <Link
+                      to={`/product/${game._id}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <Image
+                        src={game.image}
+                        alt={game.title}
+                        className="d-block w-100"
+                        fluid
+                      />
+                    </Link>
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+            </Row>
+            <Row>
+              {games.map((game) => (
+                <Col key={game._id} sm={12} md={6} lg={4} xl={3}>
+                  <Product product={game} />
+                </Col>
               ))}
-            </Carousel>
-          </Col>
-        </Row>
-        <Row>
-          {products.map((product) => (
-            <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-              <Product product={product} />
-            </Col>
-          ))}
-        </Row>
+            </Row>
+          </>
+        )}
       </Container>
     </>
   );

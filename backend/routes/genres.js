@@ -11,7 +11,6 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
     let genres = await Genre.find().sort('name');
-    res.header("Access-Control-Allow-Origin", "*")
     res.send(genres);
 });
 
