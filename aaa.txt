@@ -1,1 +1,0 @@
-    "db": "mongodb+srv://nebojsa:zoki123@starter.rjofx.mongodb.net/gamesdirdb?retryWrites=true&w=majority",
