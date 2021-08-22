@@ -9,8 +9,8 @@ function makeKey(length) {
     return result;
 }
 
-function generate() {
+const generate = () => {
     return (`${makeKey(5)}-${makeKey(5)}-${makeKey(5)}`);
 }
 
-exports.generate = generate;
+export default generate;

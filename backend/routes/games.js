@@ -1,38 +1,48 @@
-const express = require('express');
+import express from 'express';
+import admin from '../middleware/admin.js'
+import auth from '../middleware/auth.js';
+import { Game, validateGame } from '../models/game.js';
+import { Genre } from '../models/genre.js';
+import asyncHandler from 'express-async-handler';
+import { validateObjectId } from '../middleware/validateObjectId.js';
+
 const router = express.Router();
-const mongoose = require('mongoose');
-const admin = require('../middleware/admin');
-const auth = require('../middleware/auth');
-const { Game, validate } = require('../models/game');
-const { Genre } = require('../models/genre');
 
 //GET
 
-router.get('/', async (req, res) => {
+router.get('/', asyncHandler(async (req, res) => {
     let games = await Game.find().sort('title');
-    res.send(games);
-});
+    res.json(games);
+}));
 
 //GET:ID
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, asyncHandler(async (req, res) => {
     const game = await Game.findById(req.params.id);
 
-    if (!game) return res.status(404).send("The game with the given ID was not found.");
-
-    res.send(game);
-});
+    if (game) {
+        res.json(game);
+    }
+    else {
+        res.status(404);
+        throw new Error('Product not found');
+    }
+}));
 
 //POST
 
-router.post('/', [auth, admin], async (req, res) => {
-    const { error } = validate(req.body);
+router.post('/', [auth, admin], asyncHandler(async (req, res) => {
+    const { error } = validateGame(req.body);
     if (error) {
-        return res.status(400).send(error.message);
+        res.status(400);
+        throw new Error(error.message);
     }
 
     const genre = await Genre.findById(req.body.genreId);
-    if (!genre) return res.status(400).send('Invalid genre');
+    if (!genre) {
+        res.status(400);
+        throw new Error('Invalid genre');
+    };
 
     let game = new Game({
         title: req.body.title,
@@ -43,7 +53,6 @@ router.post('/', [auth, admin], async (req, res) => {
         },
         price: req.body.price,
         tags: req.body.tags,
-        totalPurchases: 0,
         image: req.body.image,
         description: req.body.description,
         rating: req.body.rating,
@@ -52,17 +61,23 @@ router.post('/', [auth, admin], async (req, res) => {
     });
 
     game = await game.save();
-    res.send(game);
-});
+    res.json(game);
+}));
 
 //PUT
 
-router.put('/:id', async (req, res) => {
-    let { error } = validate(req.body);
-    if (error) return res.status(400).send(error.message);
+router.put('/:id', validateObjectId, asyncHandler(async (req, res) => {
+    let { error } = validateGame(req.body);
+    if (error) {
+        res.status(400);
+        throw new Error(error.message);
+    }
 
     const genre = await Genre.findById(req.body.genreId);
-    if (!genre) return res.status(400).send('Invalid genre');
+    if (!genre) {
+        res.status(400);
+        throw new Error('Invalid genre');
+    }
 
     const game = await Game.findByIdAndUpdate(req.params.id, {
         title: req.body.title,
@@ -76,19 +91,25 @@ router.put('/:id', async (req, res) => {
     },
         { new: true });
 
-    if (!game) return res.status(404).send("The game with the given ID was not found.");
+    if (!game) {
+        res.status(404);
+        throw new Error("The game with the given ID was not found.");
+    }
 
-    res.send(game);
-});
+    res.json(game);
+}));
 
 //DELETE
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', validateObjectId, asyncHandler(async (req, res) => {
     const game = await Game.findByIdAndRemove(req.params.id);
 
-    if (!game) return res.status(404).send("The game with the given ID was not found.");
+    if (!game) {
+        res.status(404);
+        throw new Error("The game with the given ID was not found.");
+    }
 
-    res.send(game);
-});
+    res.json(game);
+}));
 
-module.exports = router;
+export { router };

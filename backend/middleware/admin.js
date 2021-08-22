@@ -1,9 +1,12 @@
-const config = require("config");
+const admin = (req, res, next) => {
 
-module.exports = function (req, res, next) {
+    if (!process.env.REQUIRE_AUTH) return next();
 
-    if (!config.get("requiresAuth")) return next();
-
-    if (!req.user.isAdmin) return res.status(403).send('Access denied.');
+    if (!req.user.isAdmin) {
+        res.status(403)
+        throw new Error('Access denied.');
+    }
     next();
 }
+
+export default admin;

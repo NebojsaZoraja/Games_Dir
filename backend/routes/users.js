@@ -1,28 +1,45 @@
-const auth = require('../middleware/auth');
-const { User } = require('../models/user');
-const Joi = require('joi')
-const express = require('express');
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const _ = require('lodash');
-const admin = require('../middleware/admin');
+import express from 'express';
+import auth from '../middleware/auth.js';
+import { User, validateUser } from '../models/user.js';
+import Joi from 'joi';
+import bcrypt from 'bcrypt';
+import _ from 'lodash'
+import asyncHandler from 'express-async-handler';
+import { validateObjectId } from '../middleware/validateObjectId.js';
+
 const router = express.Router();
 
 //GET
 
-router.get('/:id', auth, async (req, res) => {
+router.get('/profile', [auth], asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id).select('-password');
-    res.send(user);
-})
+    if (user) {
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+        });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+}));
 
 //POST
 
-router.post('/register', async (req, res) => {
-    let { error } = validate(req.body);
-    if (error) return res.status(400).send(error.message);
+router.post('/register', asyncHandler(async (req, res) => {
+    let { error } = validateUser(req.body);
+    if (error) {
+        res.status(400);
+        throw new Error(error.message);
+    }
 
     let user = await User.findOne({ email: req.body.email });
-    if (user) return res.status(400).send('User already registered.');
+    if (user) {
+        res.status(400);
+        throw new Error('User already registered.');
+    }
 
     user = new User(_.pick(req.body, ['name', 'email', 'password']));
     const salt = await bcrypt.genSalt(10);
@@ -30,33 +47,41 @@ router.post('/register', async (req, res) => {
     await user.save();
 
     const token = user.generateAuthToken();
-    res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
-});
+    res.header('x-auth-token', token).json(_.pick(user, ['_id', 'name', 'email']));
+}));
 
-router.post('/login', async (req, res) => {
+router.post('/login', asyncHandler(async (req, res) => {
     const { error } = validateLogin(req.body);
-    if (error) return res.status(400).send(error.message);
+    if (error) {
+        res.status(400);
+        throw new Error(error.message);
+    }
 
     let user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(400).send('Invalid email or password.');
+    if (!user) {
+        res.status(400);
+        throw new Error('Invalid email or password.');
+    }
 
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) {
-        return res.status(400).send('Invalid email or password.');
+        res.status(400);
+        throw new Error('Invalid email or password.');
     }
 
     const token = user.generateAuthToken();
     res.json({
+        _id: user._id,
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
         token: token
     })
-});
+}));
 
 //PUT
 
-router.put('/users/:id', auth, async (req, res) => {
+router.put('/:id', [auth, validateObjectId], asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id)
 
     if (user) {
@@ -81,9 +106,7 @@ router.put('/users/:id', auth, async (req, res) => {
     }
 
 
-})
-
-
+}));
 
 function validateLogin(req) {
     let schema = Joi.object({
@@ -94,4 +117,4 @@ function validateLogin(req) {
     return schema.validate(req);
 };
 
-module.exports = router;
+export { router };

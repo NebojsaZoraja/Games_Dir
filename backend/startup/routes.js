@@ -1,15 +1,17 @@
-const express = require('express');
-const genres = require('../routes/genres');
-const games = require('../routes/games');
-const users = require('../routes/users');
-const home = require('../routes/home');
-const error = require('../middleware/error');
+import express from 'express';
+import { router as genres } from '../routes/genres.js';
+import { router as games } from '../routes/games.js';
+import { router as users } from '../routes/users.js';
+import { errorHandler, notFound } from '../middleware/error.js';
 
-module.exports = function (app) {
+
+const routes = (app) => {
     app.use(express.json());
     app.use('/api/genres', genres);
     app.use('/api/games', games);
     app.use('/api/users', users);
-    app.use('/', home);
-    app.use(error);
+    app.use(notFound);
+    app.use(errorHandler);
 }
+
+export { routes };
