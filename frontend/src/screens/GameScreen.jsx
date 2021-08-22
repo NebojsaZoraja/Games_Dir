@@ -7,7 +7,7 @@ import { listGameDetails } from "../actions/gameActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 
-const GameScreen = ({ match }) => {
+const GameScreen = ({ match, history }) => {
   const dispatch = useDispatch();
 
   const gameDetails = useSelector((state) => state.gameDetails);
@@ -16,6 +16,10 @@ const GameScreen = ({ match }) => {
   useEffect(() => {
     dispatch(listGameDetails(match.params.id));
   }, [dispatch, match]);
+
+  const buyNowHandler = () => {
+    history.push(`/overview/${match.params.id}`);
+  };
 
   return (
     <>
@@ -67,6 +71,7 @@ const GameScreen = ({ match }) => {
                   <ListGroup.Item>
                     <Row>
                       <Button
+                        onClick={buyNowHandler}
                         style={{
                           backgroundColor: "dodgerblue",
                           borderColor: "dodgerblue",

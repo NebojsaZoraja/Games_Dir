@@ -30,8 +30,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.generateAuthToken = function () {
-    const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, process.env.JWT_PRIVATE_KEY, { expiresIn: '15m' });
-    return token;
+    return jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, process.env.JWT_PRIVATE_KEY, { expiresIn: '1h' });
 }
 
 const User = mongoose.model('User', userSchema);

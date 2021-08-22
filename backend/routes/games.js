@@ -1,6 +1,6 @@
 import express from 'express';
 import admin from '../middleware/admin.js'
-import auth from '../middleware/auth.js';
+import { auth } from '../middleware/auth.js';
 import { Game, validateGame } from '../models/game.js';
 import { Genre } from '../models/genre.js';
 import asyncHandler from 'express-async-handler';
