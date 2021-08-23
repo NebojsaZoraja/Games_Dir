@@ -1,6 +1,6 @@
 import express from 'express';
 import { auth } from '../middleware/auth.js';
-import { User, validateUser } from '../models/user.js';
+import { User, validateUser } from '../models/userModel.js';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
 import _ from 'lodash'
@@ -28,7 +28,7 @@ router.get('/profile', auth, asyncHandler(async (req, res) => {
 
 //POST
 
-router.post('/register', asyncHandler(async (req, res) => {
+router.post('/', asyncHandler(async (req, res) => {
     const { error } = validateUser(req.body);
     if (error) {
         res.status(400);
@@ -81,13 +81,12 @@ router.post('/login', asyncHandler(async (req, res) => {
         throw new Error('Invalid email or password.');
     }
 
-    const token = user.generateAuthToken();
     res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
-        token: token
+        token: user.generateAuthToken()
     })
 }));
 
@@ -104,20 +103,17 @@ router.put('/profile', auth, asyncHandler(async (req, res) => {
             user.password = await bcrypt.hash(user.password, salt);
         }
         const updatedUser = await user.save();
-        const token = updatedUser.generateAuthToken();
 
         res.json({
             name: updatedUser.name,
             email: updatedUser.email,
             isAdmin: updatedUser.isAdmin,
-            token: token
-        })
+            token: updatedUser.generateAuthToken()
+        });
     } else {
         res.status(404)
         throw new Error('User not found')
     }
-
-
 }));
 
 function validateLogin(req) {

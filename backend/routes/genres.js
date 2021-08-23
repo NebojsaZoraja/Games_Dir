@@ -1,4 +1,4 @@
-import { Genre, validateGenre } from '../models/genre.js'
+import { Genre, validateGenre } from '../models/genreModel.js'
 import express from 'express';
 import admin from '../middleware/admin.js'
 import { auth } from '../middleware/auth.js';

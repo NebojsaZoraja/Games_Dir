@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.generateAuthToken = function () {
-    return jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, process.env.JWT_PRIVATE_KEY, { expiresIn: '1h' });
+    return jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, process.env.JWT_PRIVATE_KEY, { expiresIn: "2h" });
 }
 
 const User = mongoose.model('User', userSchema);
@@ -45,4 +45,4 @@ const validateUser = (user) => {
     return schema.validate(user);
 };
 
-export { User, validateUser };
+export { User, validateUser, userSchema };

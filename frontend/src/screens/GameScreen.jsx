@@ -10,6 +10,9 @@ import Message from "../components/Message";
 const GameScreen = ({ match, history }) => {
   const dispatch = useDispatch();
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   const gameDetails = useSelector((state) => state.gameDetails);
   const { loading, error, game } = gameDetails;
 
@@ -18,7 +21,11 @@ const GameScreen = ({ match, history }) => {
   }, [dispatch, match]);
 
   const buyNowHandler = () => {
-    history.push(`/overview/${match.params.id}`);
+    if (userInfo) {
+      history.push(`/overview/${match.params.id}`);
+    } else {
+      history.push(`/login?redirect=overview/${game._id}`);
+    }
   };
 
   return (

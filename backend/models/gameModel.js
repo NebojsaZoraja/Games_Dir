@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import mongoose from 'mongoose';
-import { genreSchema } from './genre.js';
+import { genreSchema } from './genreModel.js';
 
 const gameSchema = mongoose.Schema({
     title: {

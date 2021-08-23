@@ -1,61 +1,101 @@
 import React, { useEffect } from "react";
-import {
-  Col,
-  Container,
-  ListGroup,
-  Row,
-  Image,
-  Form,
-  Button,
-  Card,
-} from "react-bootstrap";
+import { Col, Container, Row, Button, Card } from "react-bootstrap";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import Message from "../components/Message";
-import { addToCart } from "../actions/cartActions";
+import { addToCart, removeFromCart } from "../actions/cartActions";
 
 const OverviewScreen = ({ match, location, history }) => {
   const productId = match.params.id;
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
   const { cartItem } = cart;
+
+  const removeFromCartHandler = (id) => {
+    dispatch(removeFromCart(id));
+    history.replace("/empty");
+  };
+
   useEffect(() => {
-    if (productId) {
-      dispatch(addToCart(productId));
+    if (userInfo) {
+      if (productId) {
+        dispatch(addToCart(productId));
+      }
+    } else {
+      history.push(`/login?redirect=overview/${productId}`);
     }
-  }, [dispatch, productId]);
+  }, [dispatch, productId, userInfo, history]);
+
+  const handleGoToPayment = () => {
+    history.push("/payment");
+  };
 
   return (
     <Container>
-      <CheckoutSteps step1 step2 />
-      <Row className="justify-content-center">
-        <Col lg={7}>
-          <Card>
-            <Card.Img src={cartItem.image} />
-            <Card.Body>
-              <Row className="py-2">
-                <Card.Text style={{ fontSize: "2rem" }}>
-                  Price: ${cartItem.price}
-                </Card.Text>
-              </Row>
-              <Row className="py-2">
-                <Card.Text style={{ fontSize: "1.5rem" }}>
-                  Important! The activation keys we provide are going to work
-                  only on the Steam platform.
-                  <br /> You will need a Steam account in order to activate this
-                  product.
-                </Card.Text>
-              </Row>
-              <Row className="py-2">
-                <Button className="mt-3">Proceed to payment</Button>
-              </Row>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+      {cartItem.game ? (
+        <>
+          <CheckoutSteps step1 step2 />
+          <Row className="justify-content-center">
+            <Col lg={7} xs={15}>
+              <Card>
+                <Card>
+                  <Card.Img src={cartItem.image} />
+                  <Card.Body>
+                    <Row className="py-2">
+                      <Card.Text
+                        as="h4"
+                        style={{ color: "black", textAlign: "center" }}
+                      >
+                        Price: ${cartItem.price}
+                      </Card.Text>
+                    </Row>
+                    <Row className="py-2">
+                      <Card.Text as="h5" style={{ color: "black" }}>
+                        Important! The activation keys we provide are going to
+                        work only on the Steam platform.
+                        <br /> You will need a Steam account in order to
+                        activate this product.
+                      </Card.Text>
+                    </Row>
+                    <Row className="py-2 justify-content-center">
+                      <Col lg={6} style={{ textAlign: "center" }}>
+                        <Button
+                          onClick={handleGoToPayment}
+                          style={{
+                            backgroundColor: "dodgerblue",
+                            borderColor: "dodgerblue",
+                          }}
+                          className="mt-3 w-100"
+                          disabled={cartItem.numberInStock === 0}
+                        >
+                          {cartItem.numberInStock > 0
+                            ? "Proceed to Payment"
+                            : "Out Of Stock"}
+                        </Button>
+                        <Button
+                          onClick={() => removeFromCartHandler(productId)}
+                          style={{
+                            backgroundColor: "red",
+                            borderColor: "red",
+                          }}
+                          className="mt-3 w-100"
+                        >
+                          Remove from cart
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Card.Body>
+                </Card>
+              </Card>
+            </Col>
+          </Row>
+        </>
+      ) : (
+        <></>
+      )}
     </Container>
   );
 };

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS } from "../constatns/userConstants"
+import { USER_AUTO_LOGOUT_INIT, USER_AUTO_LOGOUT_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS } from "../constatns/userConstants"
 
 export const login = (email, password) => async (dispatch) => {
     try {
@@ -20,11 +20,8 @@ export const login = (email, password) => async (dispatch) => {
             payload: data
         })
 
-        localStorage.setItem('userInfo', JSON.stringify(data))
+        sessionStorage.setItem('userInfo', JSON.stringify(data))
 
-        setTimeout(() => {
-            dispatch(logout());
-        }, 3600000);
 
     } catch (error) {
         dispatch({
@@ -35,10 +32,22 @@ export const login = (email, password) => async (dispatch) => {
 }
 
 export const logout = () => (dispatch) => {
-    localStorage.removeItem('userInfo');
+    sessionStorage.removeItem('userInfo');
     dispatch({
         type: USER_LOGOUT,
     })
+}
+
+export const autoLogout = () => (dispatch) => {
+    dispatch({
+        type: USER_AUTO_LOGOUT_INIT,
+    })
+    setTimeout(() => {
+        dispatch(logout());
+        dispatch({
+            type: USER_AUTO_LOGOUT_SUCCESS,
+        })
+    }, 3600000);
 }
 
 export const register = (name, email, password) => async (dispatch) => {
@@ -53,7 +62,7 @@ export const register = (name, email, password) => async (dispatch) => {
             }
         }
 
-        const { data } = await axios.post('/api/users/register', { name, email, password }, config);
+        const { data } = await axios.post('/api/users/', { name, email, password }, config);
 
         dispatch({
             type: USER_REGISTER_SUCCESS,
@@ -65,7 +74,7 @@ export const register = (name, email, password) => async (dispatch) => {
             payload: data
         })
 
-        localStorage.setItem('userInfo', JSON.stringify(data))
+        sessionStorage.setItem('userInfo', JSON.stringify(data))
     } catch (error) {
         dispatch({
             type: USER_REGISTER_FAIL,
@@ -123,7 +132,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
             type: USER_UPDATE_PROFILE_SUCCESS,
             payload: data
         })
-        localStorage.setItem('userInfo', JSON.stringify(data))
+        sessionStorage.setItem('userInfo', JSON.stringify(data))
 
     } catch (error) {
         dispatch({

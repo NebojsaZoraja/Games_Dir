@@ -4,7 +4,7 @@ import { Form, Button, Row, Col, Container, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { login } from "../actions/userActions";
+import { autoLogout, login } from "../actions/userActions";
 
 const LoginScreen = ({ location, history }) => {
   const [email, setEmail] = useState("");
@@ -28,13 +28,14 @@ const LoginScreen = ({ location, history }) => {
     e.preventDefault();
 
     dispatch(login(email, password));
+    dispatch(autoLogout());
   };
 
   return (
     <Container>
       <Row className="justify-content-center my-lg-5 my-md-5 my-4">
         <Col lg={4} md={6}>
-          <Card className="p-2">
+          <Card className="p-2" style={{ backgroundColor: "indigo" }}>
             <h1 style={{ textAlign: "center" }}>Sign In</h1>
             {error && <Message variant="danger">{error}</Message>}
             {loading && <Loader />}

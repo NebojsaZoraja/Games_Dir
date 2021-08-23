@@ -9,6 +9,9 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import OverviewScreen from './screens/OverviewScreen';
+import EmptyCartScreen from './screens/EmptyCartScreen';
+import PaymentScreen from './screens/PaymentScreen';
+import PlaceOrderScreen from './screens/PlaceOrderScreen';
 
 function App() {
   return (
@@ -18,6 +21,9 @@ function App() {
         <Container bg="dark">
           <Route path="/product/:id" component={GameScreen} />
           <Route path="/overview/:id" component={OverviewScreen} />
+          <Route path="/payment" component={PaymentScreen} />
+          <Route path="/placeorder" component={PlaceOrderScreen} />
+          <Route path="/empty" component={EmptyCartScreen} />
           <Route path="/profile" component={ProfileScreen} />
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />

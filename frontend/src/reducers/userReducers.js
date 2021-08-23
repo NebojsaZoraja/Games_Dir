@@ -1,4 +1,4 @@
-import { USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS } from "../constatns/userConstants";
+import { USER_AUTO_LOGOUT_INIT, USER_AUTO_LOGOUT_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS } from "../constatns/userConstants";
 
 
 export const userLoginReducer = (state = {}, action) => {
@@ -10,6 +10,10 @@ export const userLoginReducer = (state = {}, action) => {
         case USER_LOGIN_FAIL:
             return { loading: false, error: action.payload }
         case USER_LOGOUT:
+            return {}
+        case USER_AUTO_LOGOUT_INIT:
+            return {}
+        case USER_AUTO_LOGOUT_SUCCESS:
             return {}
         default:
             return state;

@@ -38,9 +38,9 @@ const RegisterScreen = ({ location, history }) => {
 
   return (
     <Container>
-      <Row className="justify-content-center my-lg-5 my-md-5 my-4">
+      <Row className="justify-content-center my-lg-3 my-md-3 my-4">
         <Col lg={4} md={6}>
-          <Card className="p-2">
+          <Card className="p-2" style={{ backgroundColor: "indigo" }}>
             <h1 style={{ textAlign: "center" }}>Register</h1>
             {message && <Message variant="danger">{message}</Message>}
             {error && <Message variant="danger">{error}</Message>}

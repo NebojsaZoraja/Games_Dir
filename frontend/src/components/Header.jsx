@@ -3,15 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { logout } from "../actions/userActions";
+import { withRouter } from "react-router-dom";
+import { removeFromCart } from "../actions/cartActions";
 
-const Header = () => {
+const Header = ({ history }) => {
   const dispatch = useDispatch();
-
+  const cart = useSelector((state) => state.cart);
+  const { cartItem } = cart;
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   const logoutHandler = () => {
     dispatch(logout());
+    dispatch(removeFromCart(cartItem.game));
+    history.push("/");
   };
 
   return (
@@ -25,14 +30,26 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               {userInfo ? (
-                <NavDropdown title={userInfo.name} id="username">
-                  <LinkContainer to="/profile">
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
-                  </LinkContainer>
-                  <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
+                <>
+                  {cartItem.game ? (
+                    <LinkContainer to={`/overview/${cartItem.game}`}>
+                      <Nav.Link>
+                        <i className="fas fa-shopping-cart"></i>&nbsp; Your
+                        purchase
+                      </Nav.Link>
+                    </LinkContainer>
+                  ) : (
+                    <></>
+                  )}
+                  <NavDropdown title={userInfo.name} id="username">
+                    <LinkContainer to="/profile">
+                      <NavDropdown.Item>Profile</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Item onClick={logoutHandler}>
+                      Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                </>
               ) : (
                 <LinkContainer to="/login">
                   <Nav.Link>
@@ -48,4 +65,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default withRouter(Header);
