@@ -1,6 +1,7 @@
 import express from 'express';
 import { auth } from '../middleware/auth.js';
-import { User, validateUser } from '../models/userModel.js';
+import User from '../models/userModel.js';
+import { validateUser } from '../models/userModel.js';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
 import _ from 'lodash'
@@ -75,7 +76,7 @@ router.post('/login', asyncHandler(async (req, res) => {
     }
 
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    console.log(validPassword);
+
     if (!validPassword) {
         res.status(400);
         throw new Error('Invalid email or password.');

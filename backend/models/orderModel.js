@@ -4,14 +4,15 @@ import { userSchema } from "./userModel.js";
 const orderSchema = mongoose.Schema(
     {
         user: {
-            type: userSchema,
-            required: true
+            type: mongoose.Types.ObjectId,
+            required: true,
+            ref: 'User'
         },
         orderItem: {
-            name: { type: String, required: true },
+            title: { type: String, required: true },
             image: { type: String, required: true },
-            price: { type: String, required: true },
-            game: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Game' },
+            price: { type: Number, required: true },
+            game: { type: mongoose.Types.ObjectId, required: true, ref: 'Game' },
         },
         paymentMethod: {
             type: String,
@@ -28,6 +29,18 @@ const orderSchema = mongoose.Schema(
             required: true,
             default: 0
         },
+        isPaid: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
+        productKey: {
+            type: String,
+            required: true
+        }
+    },
+    {
+        timestamps: true
     }
 )
 

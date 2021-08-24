@@ -61,6 +61,8 @@ const gameSchema = mongoose.Schema({
         required: true,
         default: 0
     }
+}, {
+    timestamps: true
 });
 
 const Game = new mongoose.model('Game', gameSchema);
@@ -83,4 +85,4 @@ const validateGame = (game) => {
     return schema.validate(game);
 };
 
-export { Game, validateGame };
+export { Game, validateGame, gameSchema };

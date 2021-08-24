@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
-import { User } from '../models/userModel.js';
+import User from '../models/userModel.js';
 
 const auth = asyncHandler(async (req, res, next) => {
     let token;
@@ -13,7 +13,6 @@ const auth = asyncHandler(async (req, res, next) => {
             req.user = await User.findById(decoded._id).select('-password');
             next();
         } catch (error) {
-            console.error(error);
             res.status(401);
             throw new Error('Not authorized, token failed');
         }

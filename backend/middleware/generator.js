@@ -13,4 +13,4 @@ const generate = () => {
     return (`${makeKey(5)}-${makeKey(5)}-${makeKey(5)}`);
 }
 
-export default generate;
+export { generate };

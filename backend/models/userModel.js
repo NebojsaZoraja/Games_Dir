@@ -27,6 +27,8 @@ const userSchema = new mongoose.Schema({
         required: true,
         default: false
     }
+}, {
+    timestamps: true
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -45,4 +47,5 @@ const validateUser = (user) => {
     return schema.validate(user);
 };
 
-export { User, validateUser, userSchema };
+export default User
+export { validateUser, userSchema };

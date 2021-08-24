@@ -34,14 +34,20 @@ const Header = ({ history }) => {
                   {cartItem.game ? (
                     <LinkContainer to={`/overview/${cartItem.game}`}>
                       <Nav.Link>
-                        <i className="fas fa-shopping-cart"></i>&nbsp; Your
-                        purchase
+                        <i className="fas fa-shopping-cart"></i>&nbsp; Cart
                       </Nav.Link>
                     </LinkContainer>
                   ) : (
                     <></>
                   )}
-                  <NavDropdown title={userInfo.name} id="username">
+                  <NavDropdown
+                    title={
+                      <>
+                        <i className="fas fa-user"></i>&nbsp; {userInfo.name}
+                      </>
+                    }
+                    id="username"
+                  >
                     <LinkContainer to="/profile">
                       <NavDropdown.Item>Profile</NavDropdown.Item>
                     </LinkContainer>

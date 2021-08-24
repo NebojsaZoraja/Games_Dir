@@ -4,10 +4,8 @@ import { useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 
 const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
-  const gameDetails = useSelector((state) => state.gameDetails);
   const cart = useSelector((state) => state.cart);
   const { cartItem } = cart;
-  const { game } = gameDetails;
   return (
     <Nav className="justify-content-center mb-4" variant="pills">
       <Nav.Item>
@@ -26,7 +24,7 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
       <Nav.Item>
         {step2 ? (
           <LinkContainer
-            to={`/overview/${game._id}`}
+            to={`/overview/${cartItem.game}`}
             className="mx-1"
             style={{ backgroundColor: "limegreen" }}
           >
@@ -55,7 +53,6 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
             className="mx-1"
             to="/placeorder"
             style={{ backgroundColor: "limegreen" }}
-            rounded
           >
             <Nav.Link>Claim Your Game</Nav.Link>
           </LinkContainer>

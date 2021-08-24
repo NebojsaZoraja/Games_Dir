@@ -12,6 +12,7 @@ const routes = (app) => {
     app.use('/api/games', games);
     app.use('/api/users', users);
     app.use('/api/orders', orders);
+    app.get('/api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID))
     app.use(notFound);
     app.use(errorHandler);
 }

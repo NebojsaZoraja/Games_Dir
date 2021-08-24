@@ -1,8 +1,8 @@
 import express from 'express';
 const app = express();
 import 'colors';
-import { routes } from './startup/routes.js';
 import { env } from './startup/env.js';
+import { routes } from './startup/routes.js';
 import { db } from './startup/db.js';
 import { prod } from './startup/prod.js'
 

@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { gameDetailsReducer, gameListReducer } from './reducers/gameReducers'
 import { userDetailsReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer } from './reducers/userReducers';
 import { cartReducer } from './reducers/cartReducers';
+import { orderCreateReducer, orderDetailsReducer, orderPayReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
     gameList: gameListReducer,
@@ -13,6 +14,9 @@ const reducer = combineReducers({
     userDetails: userDetailsReducer,
     userUpdateProfile: userUpdateProfileReducer,
     cart: cartReducer,
+    orderCreate: orderCreateReducer,
+    orderDetails: orderDetailsReducer,
+    orderPay: orderPayReducer,
 });
 
 const userInfoFromStorage = sessionStorage.getItem('userInfo')

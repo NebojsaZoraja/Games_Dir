@@ -14,7 +14,7 @@ export const gameListReducer = (state = { games: [] }, action) => {
 
 }
 
-export const gameDetailsReducer = (state = { game: {} }, action) => {
+export const gameDetailsReducer = (state = { loading: true, game: {} }, action) => {
     switch (action.type) {
         case GAME_DETAILS_REQUEST:
             return { loading: true, ...state }

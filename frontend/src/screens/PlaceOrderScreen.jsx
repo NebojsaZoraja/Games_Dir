@@ -1,15 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button, Col, Card, Row, ListGroup } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
+import { createOrder } from "../actions/orderActions";
 
 const PlaceOrderScreen = ({ history }) => {
+  const dispatch = useDispatch();
+
   const cart = useSelector((state) => state.cart);
   const { cartItem } = cart;
 
+  const orderCreate = useSelector((state) => state.orderCreate);
+  const { order, success, error } = orderCreate;
+
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order._id}`);
+    }
+  }, [history, success, order]);
+
   const placeOrderHandler = () => {
-    console.log("order");
+    dispatch(
+      createOrder({
+        orderItem: cartItem,
+        paymentMethod: cart.paymentMethod,
+        totalPrice: cartItem.price,
+      })
+    );
   };
 
   if (!cartItem.game) {
@@ -22,12 +40,14 @@ const PlaceOrderScreen = ({ history }) => {
 
       <Row className="justify-content-center">
         <Col lg={5}>
-          <Card>
+          <Card variant="flush">
             <Card>
-              <ListGroup variant="flush" className="py-3">
-                <ListGroup.Item>
+              <ListGroup variant="flush" className="">
+                <ListGroup.Item
+                  style={{ borderBottom: "solid", borderWidth: "0.5px" }}
+                >
                   <h2>Overview</h2>
-                  <h5 style={{ textDecoration: "none" }}>
+                  <h5>
                     <strong>Title: </strong>
                     {cartItem.title}
                   </h5>
@@ -35,7 +55,7 @@ const PlaceOrderScreen = ({ history }) => {
 
                 <ListGroup.Item>
                   <h2>Payment Method</h2>
-                  <h5 style={{ textDecoration: "none" }}>
+                  <h5>
                     <strong>Method: </strong>
                     {cart.paymentMethod}
                   </h5>
@@ -44,18 +64,29 @@ const PlaceOrderScreen = ({ history }) => {
             </Card>
           </Card>
         </Col>
-        <Col lg={3}>
+        <Col lg={4}>
           <Card variant="flush">
             <Card>
-              <ListGroup variant="flush" className="py-3">
-                <ListGroup.Item>
+              <ListGroup variant="flush" className="">
+                <ListGroup.Item
+                  style={{
+                    borderBottom: "solid",
+                    borderWidth: "0.5px",
+                    textAlign: "center",
+                  }}
+                >
                   <h2>Order Summary</h2>
                 </ListGroup.Item>
-                <ListGroup.Item>
+                <ListGroup.Item
+                  style={{ borderBottom: "solid", borderWidth: "0.5px" }}
+                >
                   <Row style={{ textAlign: "center" }}>
-                    <Col as="h5">Total:</Col>
-                    <Col as="h5">${cartItem.price}</Col>
+                    <Col as="h4">Total:</Col>
+                    <Col as="h4">${cartItem.price}</Col>
                   </Row>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  {error && <Message variant="danger">{error}</Message>}
                 </ListGroup.Item>
                 <ListGroup.Item style={{ textAlign: "center" }}>
                   <Button

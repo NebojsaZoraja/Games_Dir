@@ -4,15 +4,16 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../actions/cartActions";
 
-const OverviewScreen = ({ match, location, history }) => {
+const OverviewScreen = ({ match, history }) => {
   const productId = match.params.id;
 
   const dispatch = useDispatch();
+
   const cart = useSelector((state) => state.cart);
+  const { cartItem } = cart;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-
-  const { cartItem } = cart;
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
@@ -39,12 +40,19 @@ const OverviewScreen = ({ match, location, history }) => {
         <>
           <CheckoutSteps step1 step2 />
           <Row className="justify-content-center">
-            <Col lg={7} xs={15}>
+            <Col lg={6} md={9} xs={15}>
               <Card>
                 <Card>
                   <Card.Img src={cartItem.image} />
                   <Card.Body>
-                    <Row className="py-2">
+                    <Row
+                      className="py-2"
+                      style={{
+                        borderBottom: "solid",
+                        borderWidth: "0.5px",
+                        borderColor: "black",
+                      }}
+                    >
                       <Card.Text
                         as="h4"
                         style={{ color: "black", textAlign: "center" }}
@@ -52,7 +60,14 @@ const OverviewScreen = ({ match, location, history }) => {
                         Price: ${cartItem.price}
                       </Card.Text>
                     </Row>
-                    <Row className="py-2">
+                    <Row
+                      className="py-2"
+                      style={{
+                        borderBottom: "solid",
+                        borderWidth: "0.5px",
+                        borderColor: "black",
+                      }}
+                    >
                       <Card.Text as="h5" style={{ color: "black" }}>
                         Important! The activation keys we provide are going to
                         work only on the Steam platform.
@@ -60,8 +75,13 @@ const OverviewScreen = ({ match, location, history }) => {
                         activate this product.
                       </Card.Text>
                     </Row>
-                    <Row className="py-2 justify-content-center">
-                      <Col lg={6} style={{ textAlign: "center" }}>
+                    <Row className="justify-content-center">
+                      <Col
+                        lg={7}
+                        md={7}
+                        xs={10}
+                        style={{ textAlign: "center" }}
+                      >
                         <Button
                           onClick={handleGoToPayment}
                           style={{
@@ -75,6 +95,15 @@ const OverviewScreen = ({ match, location, history }) => {
                             ? "Proceed to Payment"
                             : "Out Of Stock"}
                         </Button>
+                      </Col>
+                    </Row>
+                    <Row className="justify-content-center">
+                      <Col
+                        lg={7}
+                        md={7}
+                        xs={10}
+                        style={{ textAlign: "center" }}
+                      >
                         <Button
                           onClick={() => removeFromCartHandler(productId)}
                           style={{

@@ -31,9 +31,11 @@ const GameScreen = ({ match, history }) => {
   return (
     <>
       <Link
-        className="btn btn-light my-3"
+        className="btn btn-dark my-3"
         to="/"
-        style={{ textDecoration: "none" }}
+        style={{
+          textDecoration: "none",
+        }}
       >
         Go back
       </Link>
@@ -54,8 +56,10 @@ const GameScreen = ({ match, history }) => {
             </Col>
             <Col md={4} sm={4} lg={3} xs={12} className="mt-2 mt-lg-4 mt-md-0">
               <Card>
-                <ListGroup variant="flush" style={{ width: "100%" }}>
-                  <ListGroup.Item>
+                <ListGroup style={{ width: "100%" }}>
+                  <ListGroup.Item
+                    style={{ borderBottom: "solid", borderWidth: "0.5px" }}
+                  >
                     <Row style={{ textAlign: "center" }}>
                       <Col as="h5">Price:</Col>
                       <Col as="h5">
@@ -98,7 +102,9 @@ const GameScreen = ({ match, history }) => {
             <Col lg={10}>
               <Card>
                 <ListGroup variant="flush">
-                  <ListGroup.Item>
+                  <ListGroup.Item
+                    style={{ borderBottom: "solid", borderWidth: "0.5px" }}
+                  >
                     <h3>{game.title}</h3>
                     <Rating
                       value={game.rating}

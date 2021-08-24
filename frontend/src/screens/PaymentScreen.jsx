@@ -30,17 +30,24 @@ const PaymentScreen = ({ history }) => {
         <Col lg={7} xs={15}>
           <Card>
             <Card>
-              <h2 style={{ color: "black", textAlign: "center" }}>
+              <h2
+                className="pt-3"
+                style={{ color: "black", textAlign: "center" }}
+              >
                 Payment method
               </h2>
               <Card.Body>
                 <Form onSubmit={submitHandler}>
                   <Form.Group>
-                    <Form.Label as="legend" style={{ color: "black" }}>
-                      Select payment method
+                    <Form.Label
+                      className="py-1"
+                      as="legend"
+                      style={{ color: "black" }}
+                    >
+                      Select payment method:
                     </Form.Label>
                   </Form.Group>
-                  <Row className="mt-4">
+                  <Row className="py-1">
                     <Col>
                       <Form.Check
                         style={{ color: "black" }}
@@ -54,6 +61,7 @@ const PaymentScreen = ({ history }) => {
                       ></Form.Check>
                     </Col>
                   </Row>
+
                   <Row className="justify-content-center mt-4">
                     <Col style={{ textAlign: "center" }}>
                       <Button

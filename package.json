@@ -33,7 +33,8 @@
     "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
-    "mongoose": "^5.13.7"
+    "mongoose": "^5.13.7",
+    "react-bootstrap": "^2.0.0-beta.0"
   },
   "devDependencies": {
     "concurrently": "^6.2.1",
