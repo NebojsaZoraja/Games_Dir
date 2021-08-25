@@ -29,23 +29,25 @@ const HomeScreen = () => {
         ) : (
           <>
             <Row className="justify-content-center">
-              <Carousel>
-                {discountGames.map((game) => (
-                  <Carousel.Item key={game._id}>
-                    <Link
-                      to={`/product/${game._id}`}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Image
-                        src={game.image}
-                        alt={game.title}
-                        className="d-block w-100"
-                        fluid
-                      />
-                    </Link>
-                  </Carousel.Item>
-                ))}
-              </Carousel>
+              <Col>
+                <Carousel>
+                  {discountGames.map((game) => (
+                    <Carousel.Item key={game._id}>
+                      <Link
+                        to={`/product/${game._id}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Image
+                          src={game.image}
+                          alt={game.title}
+                          className="d-block w-100"
+                          fluid
+                        />
+                      </Link>
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              </Col>
             </Row>
             <Row>
               {games.map((game) => (

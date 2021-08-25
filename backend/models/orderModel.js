@@ -36,7 +36,8 @@ const orderSchema = mongoose.Schema(
         },
         productKey: {
             type: String,
-            required: true
+            required: true,
+            default: " "
         }
     },
     {

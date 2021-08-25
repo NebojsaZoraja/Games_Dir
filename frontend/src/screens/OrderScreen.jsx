@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails, payOrder } from "../actions/orderActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import { ORDER_PAY_RESET } from "../constatns/orderConstants";
+import { ORDER_FINISHED, ORDER_PAY_RESET } from "../constatns/orderConstants";
 import { removeFromCart } from "../actions/cartActions";
 
 const OrderScreen = ({ match, history }) => {
@@ -36,8 +36,8 @@ const OrderScreen = ({ match, history }) => {
     };
 
     if (!order || successPay) {
-      dispatch({ type: ORDER_PAY_RESET });
       dispatch(getOrderDetails(orderId));
+      dispatch({ type: ORDER_PAY_RESET });
     } else if (!order.isPaid) {
       if (!window.paypal) {
         addPayPalScript();
@@ -53,6 +53,9 @@ const OrderScreen = ({ match, history }) => {
   };
 
   const handleBackToHome = () => {
+    if (order.isPaid) {
+      dispatch({ type: ORDER_FINISHED });
+    }
     history.replace("/");
   };
 
@@ -224,7 +227,7 @@ const OrderScreen = ({ match, history }) => {
                       >
                         Click to see your product key
                       </Button>
-                      <Collapse in={open} className="my-1 ">
+                      <Collapse in={open} className="my-1">
                         <Dropdown>
                           <Card.Header>
                             <p>{order.productKey}</p>

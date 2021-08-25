@@ -6,6 +6,15 @@ import { generate } from '../middleware/generator.js';
 
 const router = express.Router();
 
+
+//GET USER ORDERS
+
+router.get('/myorders', auth, asyncHandler(async (req, res) => {
+    const orders = await Order.find({ user: req.user._id });
+    res.json(orders);
+}))
+
+
 //GET order
 
 router.get('/:id', auth, asyncHandler(async (req, res) => {
@@ -20,6 +29,8 @@ router.get('/:id', auth, asyncHandler(async (req, res) => {
 
 }));
 
+
+
 //Create order POST
 
 router.post('/', auth, asyncHandler(async (req, res) => {
@@ -32,7 +43,6 @@ router.post('/', auth, asyncHandler(async (req, res) => {
         order = new Order({
             user: req.user._id,
             orderItem, paymentMethod, totalPrice,
-            productKey: generate(),
         })
     }
     order.save();
@@ -44,7 +54,9 @@ router.put('/:id/pay', auth, asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
 
     if (order) {
+
         order.isPaid = true,
+            order.productKey = generate(),
             order.paymentResult = {
                 id: req.body.id,
                 status: req.body.status,
@@ -56,9 +68,9 @@ router.put('/:id/pay', auth, asyncHandler(async (req, res) => {
         throw new Error('Order not found');
     }
 
-    const updatedOrder = await order.save();
+    await order.save();
 
-    res.json(updatedOrder);
+    res.json(order);
 
 }))
 

@@ -111,7 +111,34 @@ const GameScreen = ({ match, history }) => {
                       text={`${game.numReviews} reviews`}
                     />
                   </ListGroup.Item>
-                  <ListGroup.Item>{game.description}</ListGroup.Item>
+                  <ListGroup.Item
+                    style={{ borderBottom: "solid", borderWidth: "0.5px" }}
+                  >
+                    {game.description}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Row className="justify-content-center">
+                      <Col
+                        lg={5}
+                        style={{ borderRight: "solid", borderWidth: "0.5px" }}
+                      >
+                        <ul>
+                          <strong>MINIMUM:</strong>
+                          {game.minRequirements.map((requirement) => (
+                            <li key={requirement}>{requirement}</li>
+                          ))}
+                        </ul>
+                      </Col>
+                      <Col lg={5}>
+                        <ul>
+                          <strong>RECOMMENDED:</strong>
+                          {game.recRequirements.map((requirement) => (
+                            <li key={requirement}>{requirement}</li>
+                          ))}
+                        </ul>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
                 </ListGroup>
               </Card>
             </Col>

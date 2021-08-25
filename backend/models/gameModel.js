@@ -60,12 +60,22 @@ const gameSchema = mongoose.Schema({
         type: Number,
         required: true,
         default: 0
+    },
+    minRequirements: {
+        type: Array,
+        required: true
+    },
+    recRequirements: {
+        type: Array,
+        required: true
     }
 }, {
     timestamps: true
 });
 
 const Game = new mongoose.model('Game', gameSchema);
+
+const Gain = new mongoose.model('Gain', gameSchema);
 
 const validateGame = (game) => {
     let schema = Joi.object({
@@ -79,10 +89,12 @@ const validateGame = (game) => {
         rating: Joi.number().min(0).max(5),
         description: Joi.string().required(),
         numberInStock: Joi.number().min(0).max(100),
-        numReviews: Joi.number()
+        numReviews: Joi.number(),
+        minRequirements: Joi.array().required(),
+        recRequirements: Joi.array().required()
     });
 
     return schema.validate(game);
 };
 
-export { Game, validateGame, gameSchema };
+export { Game, Gain, validateGame, gameSchema };

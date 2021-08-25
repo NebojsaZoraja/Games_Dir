@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col, Container, Card } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  Container,
+  Card,
+  Table,
+  Collapse,
+  Dropdown,
+} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
+import { listmyOrders } from "../actions/orderActions";
 
 const ProfileScreen = ({ location, history }) => {
+  const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,12 +35,16 @@ const ProfileScreen = ({ location, history }) => {
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
   const { success } = userUpdateProfile;
 
+  const orderListMy = useSelector((state) => state.orderListMy);
+  const { orders, loading: loadingOrders, error: errorOrders } = orderListMy;
+
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
     } else {
       if (!user.name) {
         dispatch(getUserDetails("profile"));
+        dispatch(listmyOrders());
       } else {
         setName(userInfo.name);
         setEmail(userInfo.email);
@@ -48,8 +64,13 @@ const ProfileScreen = ({ location, history }) => {
   return (
     <Container>
       <Row className="justify-content-center my-lg-5 my-md-5 my-4">
-        <Col lg={4} md={6}>
-          <Card className="p-2">
+        <Col
+          md={6}
+          lg={5}
+          style={{ borderRight: "solid", borderWidth: "0.5px" }}
+          className=""
+        >
+          <Card className="p-2 m-lg-3">
             <h2 style={{ textAlign: "center" }}>User Profile</h2>
             {message && <Message variant="danger">{message}</Message>}
             {error && <Message variant="danger">{error}</Message>}
@@ -99,6 +120,51 @@ const ProfileScreen = ({ location, history }) => {
               </Form.Group>
             </Form>
           </Card>
+        </Col>
+        <Col lg={7}>
+          <h3 style={{ textAlign: "center" }}>My Games</h3>
+          {loadingOrders ? (
+            <Loader />
+          ) : errorOrders ? (
+            <Message variant="danger">{errorOrders}</Message>
+          ) : (
+            <>
+              <Button
+                variant="dark"
+                style={{
+                  width: "100%",
+                }}
+                onClick={() => setOpen(!open)}
+                aria-controls="example-collapse-text"
+                aria-expanded={open}
+              >
+                Click to view all of your purchases
+              </Button>
+              <Collapse in={open} className="my-1">
+                <Dropdown>
+                  <Table striped bordered hover responsive className="table-sm">
+                    <thead>
+                      <tr>
+                        <th>NAME</th>
+                        <th>TOTAL</th>
+                        <th>Purchased on</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {orders.map((order) => (
+                        <tr key={order._id}>
+                          <td>{order.orderItem.title}</td>
+                          <td>${order.totalPrice}</td>
+                          <td>{order.updatedAt.substring(0, 10)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </Dropdown>
+              </Collapse>
+            </>
+          )}
         </Col>
       </Row>
     </Container>

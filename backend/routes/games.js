@@ -57,7 +57,9 @@ router.post('/', [auth, admin], asyncHandler(async (req, res) => {
         description: req.body.description,
         rating: req.body.rating,
         numberInStock: req.body.numberInStock,
-        numReviews: req.body.numReviews
+        numReviews: req.body.numReviews,
+        minRequirements: req.body.minRequirements,
+        recRequirements: req.body.minRequirements,
     });
 
     game = await game.save();
@@ -87,7 +89,9 @@ router.put('/:id', validateObjectId, asyncHandler(async (req, res) => {
             name: genre.name
         },
         tags: req.body.tags,
-        totalPurchases: req.body.totalPurchases
+        totalPurchases: req.body.totalPurchases,
+        minRequirements: req.body.minRequirements,
+        recRequirements: req.body.minRequirements,
     },
         { new: true });
 
