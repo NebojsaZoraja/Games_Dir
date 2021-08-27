@@ -1,14 +1,20 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { gameDetailsReducer, gameListReducer } from './reducers/gameReducers'
+import { gameCreateReducer, gameDeleteReducer, gameDetailsReducer, gameGenresReducer, gameListAdminReducer, gameListReducer, gameReviewCreateReducer, gameUpdateReducer } from './reducers/gameReducers'
 import { userDeleteReducer, userDetailsReducer, userListReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer, userUpdateReducer } from './reducers/userReducers';
 import { cartReducer } from './reducers/cartReducers';
 import { orderCreateReducer, orderDetailsReducer, orderListMyReducer, orderPayReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
     gameList: gameListReducer,
+    gameListAdmin: gameListAdminReducer,
     gameDetails: gameDetailsReducer,
+    gameDelete: gameDeleteReducer,
+    gameGenres: gameGenresReducer,
+    gameCreate: gameCreateReducer,
+    gameUpdate: gameUpdateReducer,
+    gameReviewCreate: gameReviewCreateReducer,
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,

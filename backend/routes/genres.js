@@ -14,22 +14,9 @@ router.get('/', asyncHandler(async (req, res, next) => {
     res.json(genres);
 }));
 
-//GET:ID
-
-router.get('/:id', validateObjectId, asyncHandler(async (req, res) => {
-    const genre = await Genre.findById(req.params.id);
-
-    if (!genre) {
-        res.status(404);
-        throw new Error("The genre with the given ID was not found.");
-    }
-
-    res.json(genre);
-}));
-
 //POST
 
-router.post('/', auth, asyncHandler(async (req, res) => {
+router.post('/', [auth, admin], asyncHandler(async (req, res) => {
     let { error } = validateGenre(req.body);
     if (error) {
         res.status(400);

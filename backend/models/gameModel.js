@@ -2,7 +2,24 @@ import Joi from 'joi';
 import mongoose from 'mongoose';
 import { genreSchema } from './genreModel.js';
 
+const reviewSchema = mongoose.Schema(
+    {
+        name: { type: String, required: true },
+        rating: { type: Number, required: true },
+        comment: { type: String, required: true },
+        user: {
+            type: mongoose.Types.ObjectId,
+            required: true,
+            ref: 'User'
+        },
+    },
+    {
+        timestamps: true
+    }
+)
+
 const gameSchema = mongoose.Schema({
+
     title: {
         type: String,
         required: true,
@@ -16,8 +33,9 @@ const gameSchema = mongoose.Schema({
         maxlength: 255
     },
     genre: {
-        type: genreSchema,
-        required: true
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'Genre'
     },
     price: {
         type: Number,
@@ -25,29 +43,19 @@ const gameSchema = mongoose.Schema({
         min: 0,
         max: 255
     },
-    tags: {
-        type: Array,
-        required: true
-    },
     image: {
         type: String,
         required: true
     },
-    totalPurchases: {
-        type: Number,
-        min: 0,
-        default: 0
-    },
-    rating: {
-        type: Number,
-        min: 0,
-        max: 5,
-        required: true,
-        default: 0
-    },
+    reviews: [reviewSchema],
     description: {
         type: String,
         required: true,
+    },
+    rating: {
+        type: Number,
+        required: true,
+        default: 0,
     },
     numberInStock: {
         type: Number,
@@ -62,11 +70,11 @@ const gameSchema = mongoose.Schema({
         default: 0
     },
     minRequirements: {
-        type: Array,
+        type: String,
         required: true
     },
     recRequirements: {
-        type: Array,
+        type: String,
         required: true
     }
 }, {
@@ -75,26 +83,4 @@ const gameSchema = mongoose.Schema({
 
 const Game = new mongoose.model('Game', gameSchema);
 
-const Gain = new mongoose.model('Gain', gameSchema);
-
-const validateGame = (game) => {
-    let schema = Joi.object({
-        title: Joi.string().min(1).max(255).required(),
-        publisher: Joi.string().min(1).max(255).required(),
-        genreId: Joi.string().required(),
-        price: Joi.number().min(0).max(255).required(),
-        tags: Joi.array().min(1).max(255).required(),
-        image: Joi.string().required(),
-        totalPurchases: Joi.number().min(0),
-        rating: Joi.number().min(0).max(5),
-        description: Joi.string().required(),
-        numberInStock: Joi.number().min(0).max(100),
-        numReviews: Joi.number(),
-        minRequirements: Joi.array().required(),
-        recRequirements: Joi.array().required()
-    });
-
-    return schema.validate(game);
-};
-
-export { Game, Gain, validateGame, gameSchema };
+export { Game, gameSchema };

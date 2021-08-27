@@ -52,6 +52,10 @@ const ProfileScreen = ({ location, history }) => {
     }
   }, [history, userInfo, dispatch, user]);
 
+  const handleOrder = (id) => {
+    history.push(`/order/${id}`);
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -68,9 +72,8 @@ const ProfileScreen = ({ location, history }) => {
           md={6}
           lg={5}
           style={{ borderRight: "solid", borderWidth: "0.5px" }}
-          className=""
         >
-          <Card className="p-2 m-lg-3">
+          <Card className="p-2 m-lg-3 bg-dark">
             <h2 style={{ textAlign: "center" }}>User Profile</h2>
             {message && <Message variant="danger">{message}</Message>}
             {error && <Message variant="danger">{error}</Message>}
@@ -150,10 +153,13 @@ const ProfileScreen = ({ location, history }) => {
                         <th>Purchased on</th>
                       </tr>
                     </thead>
-
                     <tbody>
                       {orders.map((order) => (
-                        <tr key={order._id}>
+                        <tr
+                          key={order._id}
+                          onClick={() => handleOrder(order._id)}
+                          style={{ cursor: "pointer" }}
+                        >
                           <td>{order.orderItem.title}</td>
                           <td>${order.totalPrice}</td>
                           <td>{order.updatedAt.substring(0, 10)}</td>

@@ -25,4 +25,4 @@ const genres = [
     }
 ]
 
-module.exports = genres
+export default genres

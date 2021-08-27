@@ -22,7 +22,7 @@ const UserListScreen = ({ history }) => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listUsers());
     } else {
-      history.push("/");
+      history.push("/login");
     }
   }, [dispatch, userInfo, history, successDelete]);
 
@@ -38,7 +38,7 @@ const UserListScreen = ({ history }) => {
         className="my-3"
         style={{ borderBottom: "solid", borderWidth: "0.5px" }}
       >
-        <h1 style={{ textAlign: "center" }}>Users</h1>
+        <h1 className="text-center">Users</h1>
       </Row>
       {loading ? (
         <Loader />
@@ -51,7 +51,6 @@ const UserListScreen = ({ history }) => {
               <Table striped borderless hover responsive className="table-md">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>NAME</th>
                     <th>EMAIL</th>
                     <th>ADMIN</th>
@@ -61,7 +60,6 @@ const UserListScreen = ({ history }) => {
                 <tbody>
                   {users.map((user) => (
                     <tr key={user._id}>
-                      <td>{user._id}</td>
                       <td>{user.name}</td>
                       <td>
                         <a href={`mailto:${user.email}`}>{user.email}</a>

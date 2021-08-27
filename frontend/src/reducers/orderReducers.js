@@ -1,4 +1,4 @@
-import { ORDER_CREATE_FAIL, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS, ORDER_DETAILS_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_FINISHED, ORDER_LIST_MY_FAIL, ORDER_LIST_MY_REQUEST, ORDER_LIST_MY_SUCCESS, ORDER_PAY_FAIL, ORDER_PAY_REQUEST, ORDER_PAY_RESET, ORDER_PAY_SUCCESS } from '../constatns/orderConstants'
+import { ORDER_CREATE_FAIL, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS, ORDER_DETAILS_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_LIST_MY_FAIL, ORDER_LIST_MY_REQUEST, ORDER_LIST_MY_SUCCESS, ORDER_PAY_FAIL, ORDER_PAY_REQUEST, ORDER_PAY_RESET, ORDER_PAY_SUCCESS } from '../constatns/orderConstants'
 import { ORDER_LIST_MY_RESET } from '../constatns/orderConstants copy'
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -18,9 +18,6 @@ export const orderCreateReducer = (state = {}, action) => {
                 loading: false,
                 error: action.payload,
             }
-        case ORDER_FINISHED: {
-            return {}
-        }
         default:
             return state;
     }
@@ -42,8 +39,6 @@ export const orderDetailsReducer = (state = { loading: true, orderItem: {} }, ac
                 loading: false,
                 error: action.payload,
             }
-        case ORDER_FINISHED:
-            return { orderItem: {} }
         default:
             return state;
     }

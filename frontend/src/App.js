@@ -15,6 +15,8 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
+import GameListScreen from './screens/GameListScreen';
+import GameEditScreen from './screens/GameEditScreen';
 
 
 function App() {
@@ -23,7 +25,8 @@ function App() {
       <Header />
       <main className='py-3'>
         <Container bg="dark">
-          <Route path="/product/:id" component={GameScreen} />
+          <Route path="/search/:keyword" component={HomeScreen} exact />
+          <Route path="/game/:id" component={GameScreen} />
           <Route path="/overview/:id" component={OverviewScreen} />
           <Route path="/order/:id" component={OrderScreen} />
           <Route path="/payment" component={PaymentScreen} />
@@ -32,7 +35,10 @@ function App() {
           <Route path="/profile" component={ProfileScreen} />
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
+          <Route path="/admin/game/:id/edit" component={GameEditScreen} />
           <Route path="/admin/user/:id/edit" component={UserEditScreen} />
+          <Route path="/admin/gamelist/:pageNumber" component={GameListScreen} exact />
+          <Route path="/admin/gamelist" component={GameListScreen} exact />
           <Route path="/admin/userlist" component={UserListScreen} />
           <Route path="/" component={HomeScreen} exact />
         </Container>

@@ -1,11 +1,11 @@
-const { Genre } = require("./models/genre")
-const winston = require('winston');
-const genres = require("./data/genres")
-const mongoose = require("mongoose");
-const config = require("config");
+import { Genre } from './models/genreModel.js'
+import { Game } from './models/gameModel.js';
+import genres from "./data/genres.js"
+import games from './data/games.js';
+import mongoose from 'mongoose';
 
-const db = config.get('db');
-mongoose.connect(db, {
+
+mongoose.connect("mongodb://localhost:27017/gamesdirdb", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -15,7 +15,7 @@ mongoose.connect(db, {
 
 const importData = async () => {
     try {
-        await Genre.insertMany(genres)
+        await Game.insertMany(games)
         console.log("hello")
         process.exit();
     }

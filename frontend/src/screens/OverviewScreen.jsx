@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../actions/cartActions";
 
 const OverviewScreen = ({ match, history }) => {
-  const productId = match.params.id;
+  const gameId = match.params.id;
 
   const dispatch = useDispatch();
 
@@ -22,13 +22,13 @@ const OverviewScreen = ({ match, history }) => {
 
   useEffect(() => {
     if (userInfo) {
-      if (productId) {
-        dispatch(addToCart(productId));
+      if (gameId) {
+        dispatch(addToCart(gameId));
       }
     } else {
-      history.push(`/login?redirect=overview/${productId}`);
+      history.push(`/login?redirect=overview/${gameId}`);
     }
-  }, [dispatch, productId, userInfo, history]);
+  }, [dispatch, gameId, userInfo, history]);
 
   const handleGoToPayment = () => {
     history.push("/payment");
@@ -105,7 +105,7 @@ const OverviewScreen = ({ match, history }) => {
                         style={{ textAlign: "center" }}
                       >
                         <Button
-                          onClick={() => removeFromCartHandler(productId)}
+                          onClick={() => removeFromCartHandler(gameId)}
                           style={{
                             backgroundColor: "red",
                             borderColor: "red",

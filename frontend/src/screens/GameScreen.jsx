@@ -1,24 +1,45 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Image,
+  ListGroup,
+  Card,
+  Button,
+  Form,
+} from "react-bootstrap";
 import Rating from "../components/Rating";
-import { listGameDetails } from "../actions/gameActions";
+import { listGameDetails, createGameReview } from "../actions/gameActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import { GAME_CREATE_REVIEW_RESET } from "../constatns/gameConstatns";
 
 const GameScreen = ({ match, history }) => {
   const dispatch = useDispatch();
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const gameReviewCreate = useSelector((state) => state.gameReviewCreate);
+  const { success: successGameReview, error: errorGameReview } =
+    gameReviewCreate;
 
   const gameDetails = useSelector((state) => state.gameDetails);
   const { loading, error, game } = gameDetails;
 
   useEffect(() => {
+    if (successGameReview) {
+      alert("Review Submitted!");
+      setRating(0);
+      setComment("");
+      dispatch({ type: GAME_CREATE_REVIEW_RESET });
+    }
     dispatch(listGameDetails(match.params.id));
-  }, [dispatch, match]);
+  }, [dispatch, match, successGameReview]);
 
   const buyNowHandler = () => {
     if (userInfo) {
@@ -26,6 +47,11 @@ const GameScreen = ({ match, history }) => {
     } else {
       history.push(`/login?redirect=overview/${game._id}`);
     }
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(createGameReview(match.params.id, { rating, comment }));
   };
 
   return (
@@ -117,7 +143,7 @@ const GameScreen = ({ match, history }) => {
                     {game.description}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <Row className="justify-content-center">
+                    {/* <Row className="justify-content-center">
                       <Col
                         lg={5}
                         style={{ borderRight: "solid", borderWidth: "0.5px" }}
@@ -137,7 +163,106 @@ const GameScreen = ({ match, history }) => {
                           ))}
                         </ul>
                       </Col>
-                    </Row>
+                    </Row> */}
+                  </ListGroup.Item>
+                </ListGroup>
+              </Card>
+            </Col>
+          </Row>
+          <Row
+            className="justify-content-center my-3 py-3"
+            style={{ borderTop: "solid", borderWidth: "0.5px" }}
+          >
+            <Col lg={6}>
+              <h2 className="text-center">Reviews</h2>
+              {game.reviews.length === 0 && (
+                <Message variant="warning">No Reviews</Message>
+              )}
+              <Card>
+                <ListGroup variant="flush">
+                  {game.reviews.map((review) => (
+                    <ListGroup.Item
+                      key={review._id}
+                      style={{ borderBottom: "solid", borderWidth: "0.5px" }}
+                    >
+                      <h5>{review.name}</h5>
+                      <Rating value={review.rating} />
+                      <p>{review.createdAt.substring(0, 10)}</p>
+                      <p>{review.comment}</p>
+                    </ListGroup.Item>
+                  ))}
+                  <ListGroup.Item>
+                    <h2>Write a Review</h2>
+                    {errorGameReview && (
+                      <Message variant="danger">{errorGameReview}</Message>
+                    )}
+                    {userInfo ? (
+                      <Form onSubmit={submitHandler}>
+                        <Form.Group controlId="rating" className="my-3">
+                          <Form.Label>Rating</Form.Label>
+                          <Form.Select
+                            style={{
+                              border: "1px solid black",
+                              color: "black",
+                              width: "50%",
+                            }}
+                            value={rating}
+                            onChange={(e) => setRating(e.target.value)}
+                          >
+                            <option value="" style={{ color: "black" }}>
+                              Select...
+                            </option>
+                            <option value="1" style={{ color: "black" }}>
+                              1 - Poor
+                            </option>
+                            <option value="2" style={{ color: "black" }}>
+                              2 - Fair
+                            </option>
+                            <option value="3" style={{ color: "black" }}>
+                              3 - Good
+                            </option>
+                            <option value="4" style={{ color: "black" }}>
+                              4 - Very Good
+                            </option>
+                            <option value="5" style={{ color: "black" }}>
+                              5 - Excellent
+                            </option>
+                          </Form.Select>
+                        </Form.Group>
+                        <Col>
+                          <Form.Group controlId="comment" className="my-3">
+                            <Form.Label style={{ color: "black" }}>
+                              Comment:
+                            </Form.Label>
+                            <Form.Control
+                              style={{
+                                border: "1px solid black",
+                                color: "black",
+                              }}
+                              type="text"
+                              placeholder="Write a comment..."
+                              value={comment}
+                              as="textarea"
+                              onChange={(e) => setComment(e.target.value)}
+                            ></Form.Control>
+                          </Form.Group>
+                        </Col>
+                        <Button type="submit" variant="primary">
+                          Submit
+                        </Button>
+                      </Form>
+                    ) : (
+                      <Message>
+                        Please{" "}
+                        <Link
+                          to={`/login?redirect=game/${game._id}`}
+                          style={{ color: "black" }}
+                        >
+                          Sign in
+                        </Link>{" "}
+                        to write a review
+                      </Message>
+                    )}
                   </ListGroup.Item>
                 </ListGroup>
               </Card>

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails, payOrder } from "../actions/orderActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import { ORDER_FINISHED, ORDER_PAY_RESET } from "../constatns/orderConstants";
+import { ORDER_PAY_RESET } from "../constatns/orderConstants";
 import { removeFromCart } from "../actions/cartActions";
 
 const OrderScreen = ({ match, history }) => {
@@ -53,9 +53,6 @@ const OrderScreen = ({ match, history }) => {
   };
 
   const handleBackToHome = () => {
-    if (order.isPaid) {
-      dispatch({ type: ORDER_FINISHED });
-    }
     history.replace("/");
   };
 
@@ -80,7 +77,7 @@ const OrderScreen = ({ match, history }) => {
                   textAlign: "center",
                 }}
               >
-                <h3>Order: {order._id}</h3>
+                <h3>Order: {orderId}</h3>
               </Col>
             </Row>
             <Row className="justify-content-center">

@@ -1,119 +1,147 @@
 import express from 'express';
 import admin from '../middleware/admin.js'
 import { auth } from '../middleware/auth.js';
-import { Game, validateGame } from '../models/gameModel.js';
+import { Game } from '../models/gameModel.js';
 import { Genre } from '../models/genreModel.js';
 import asyncHandler from 'express-async-handler';
 import { validateObjectId } from '../middleware/validateObjectId.js';
+import games from '../data/games.js';
 
 const router = express.Router();
 
 //GET
 
 router.get('/', asyncHandler(async (req, res) => {
-    let games = await Game.find().sort('title');
+
+    const keyword = req.query.keyword ? {
+        title: {
+            $regex: req.query.keyword,
+            $options: 'i'
+        }
+    } : {}
+
+    const games = await Game.find({ ...keyword }).populate('genre', ' name ')
+
     res.json(games);
+}));
+
+router.get('/paginate', asyncHandler(async (req, res) => {
+    const pageSize = 3;
+    const page = Number(req.query.pageNumber) || 1
+
+    const count = await Game.countDocuments();
+
+    const games = await Game.find({}).populate('genre', ' name ').limit(pageSize).skip(pageSize * (page - 1));
+    res.json({ games, page, pages: Math.ceil(count / pageSize) });
 }));
 
 //GET:ID
 
 router.get('/:id', validateObjectId, asyncHandler(async (req, res) => {
-    const game = await Game.findById(req.params.id);
+    const game = await Game.findById(req.params.id).populate('genre', ' name ');
 
     if (game) {
         res.json(game);
     }
     else {
         res.status(404);
-        throw new Error('Product not found');
+        throw new Error('Game not found');
     }
 }));
 
 //POST
 
 router.post('/', [auth, admin], asyncHandler(async (req, res) => {
-    const { error } = validateGame(req.body);
-    if (error) {
-        res.status(400);
-        throw new Error(error.message);
-    }
-
-    const genre = await Genre.findById(req.body.genreId);
-    if (!genre) {
-        res.status(400);
-        throw new Error('Invalid genre');
-    };
-
     let game = new Game({
-        title: req.body.title,
-        publisher: req.body.publisher,
-        genre: {
-            _id: genre._id,
-            name: genre.name
-        },
-        price: req.body.price,
-        tags: req.body.tags,
-        image: req.body.image,
-        description: req.body.description,
-        rating: req.body.rating,
-        numberInStock: req.body.numberInStock,
-        numReviews: req.body.numReviews,
-        minRequirements: req.body.minRequirements,
-        recRequirements: req.body.minRequirements,
+        title: 'Sample title',
+        publisher: "Sample publisher",
+        genre: "6127b40949f80e08b4eead36",
+        price: 0,
+        image: "/images/sample.jpg",
+        description: "Sample desc",
+        numberInStock: 0,
+        numReviews: 0,
+        minRequirements: "sample minRequirements",
+        recRequirements: "sample recRequirements",
     });
 
-    game = await game.save();
-    res.json(game);
+    const createdGame = await game.save();
+    res.status(201).json(createdGame)
 }));
+
+//POST REVIEW
+
+router.post('/:id/reviews', [auth, validateObjectId], asyncHandler(async (req, res) => {
+    const { rating, comment } = req.body;
+
+    const game = await Game.findById(req.params.id).populate('genre', ' name ');
+
+    if (game) {
+        const alreadyReviewed = game.reviews.find((r) => r.user.toString() === req.user._id.toString())
+
+        if (alreadyReviewed) {
+            res.status(400);
+            throw new Error('Product already reviewed');
+        }
+
+        const review = {
+            name: req.user.name,
+            rating: Number(rating),
+            comment,
+            user: req.user._id,
+        }
+
+        game.reviews.push(review)
+        game.numReviews = game.reviews.length
+
+        game.rating = game.reviews.reduce((acc, item) => item.rating + acc, 0) / game.reviews.length
+
+        await game.save();
+        res.status(201).json({ message: "Review added" });
+    }
+
+}))
 
 //PUT
 
-router.put('/:id', validateObjectId, asyncHandler(async (req, res) => {
-    let { error } = validateGame(req.body);
-    if (error) {
-        res.status(400);
-        throw new Error(error.message);
-    }
+router.put('/:id', [validateObjectId, auth, admin], asyncHandler(async (req, res) => {
 
-    const genre = await Genre.findById(req.body.genreId);
-    if (!genre) {
-        res.status(400);
-        throw new Error('Invalid genre');
-    }
+    const { title, publisher, genre, price, image, description, numberInStock, minRequirements, recRequirements } = req.body;
 
-    const game = await Game.findByIdAndUpdate(req.params.id, {
-        title: req.body.title,
-        publisher: req.body.publisher,
-        genre: {
-            _id: genre._id,
-            name: genre.name
-        },
-        tags: req.body.tags,
-        totalPurchases: req.body.totalPurchases,
-        minRequirements: req.body.minRequirements,
-        recRequirements: req.body.minRequirements,
-    },
-        { new: true });
+    const game = await Game.findById(req.params.id).populate('genre', ' name ');
 
-    if (!game) {
+    if (game) {
+        game.title = title;
+        game.publisher = publisher;
+        game.genre = genre;
+        game.price = price;
+        game.image = image;
+        game.description = description;
+        game.numberInStock = numberInStock;
+        game.minRequirements = minRequirements;
+        game.recRequirements = recRequirements;
+
+        const updatedGame = await game.save();
+        res.json(updatedGame);
+    } else {
         res.status(404);
-        throw new Error("The game with the given ID was not found.");
+        throw new Error('Game not found');
     }
 
-    res.json(game);
 }));
 
 //DELETE
 
-router.delete('/:id', validateObjectId, asyncHandler(async (req, res) => {
+router.delete('/:id', [auth, admin], asyncHandler(async (req, res) => {
     const game = await Game.findByIdAndRemove(req.params.id);
 
     if (!game) {
         res.status(404);
         throw new Error("The game with the given ID was not found.");
+    } else {
+        await game.remove()
+        res.json({ message: 'Game removed' })
     }
-
-    res.json(game);
 }));
 
 export { router };
