@@ -20,6 +20,9 @@ const GameScreen = ({ match, history }) => {
   const dispatch = useDispatch();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [description, setDescription] = useState("");
+  const [minReq, setMinReq] = useState([]);
+  const [recReq, setRecReq] = useState([]);
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -38,8 +41,13 @@ const GameScreen = ({ match, history }) => {
       setComment("");
       dispatch({ type: GAME_CREATE_REVIEW_RESET });
     }
+    if (!loading) {
+      setMinReq(game.minRequirements.toString().split("_"));
+      setRecReq(game.recRequirements.toString().split("_"));
+      setDescription(game.description.toString());
+    }
     dispatch(listGameDetails(match.params.id));
-  }, [dispatch, match, successGameReview]);
+  }, [dispatch, match, successGameReview, game, loading]);
 
   const buyNowHandler = () => {
     if (userInfo) {
@@ -124,7 +132,11 @@ const GameScreen = ({ match, history }) => {
               </Card>
             </Col>
           </Row>
-          <Row className="justify-content-center">
+          <Row
+            className="justify-content-center my-lg-3 py-lg-3 my-3 py-3"
+            style={{ borderTop: "solid", borderWidth: "0.5px" }}
+          >
+            <h2 className="text-center">Description</h2>
             <Col lg={10}>
               <Card>
                 <ListGroup variant="flush">
@@ -140,17 +152,17 @@ const GameScreen = ({ match, history }) => {
                   <ListGroup.Item
                     style={{ borderBottom: "solid", borderWidth: "0.5px" }}
                   >
-                    {game.description}
+                    {description}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    {/* <Row className="justify-content-center">
+                    <Row className="justify-content-center">
                       <Col
                         lg={5}
                         style={{ borderRight: "solid", borderWidth: "0.5px" }}
                       >
                         <ul>
                           <strong>MINIMUM:</strong>
-                          {game.minRequirements.map((requirement) => (
+                          {minReq.map((requirement) => (
                             <li key={requirement}>{requirement}</li>
                           ))}
                         </ul>
@@ -158,19 +170,19 @@ const GameScreen = ({ match, history }) => {
                       <Col lg={5}>
                         <ul>
                           <strong>RECOMMENDED:</strong>
-                          {game.recRequirements.map((requirement) => (
+                          {recReq.map((requirement) => (
                             <li key={requirement}>{requirement}</li>
                           ))}
                         </ul>
                       </Col>
-                    </Row> */}
+                    </Row>
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
             </Col>
           </Row>
           <Row
-            className="justify-content-center my-3 py-3"
+            className="justify-content-center my-lg-3 py-lg-3 my-3 py-3"
             style={{ borderTop: "solid", borderWidth: "0.5px" }}
           >
             <Col lg={6}>

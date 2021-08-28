@@ -1,6 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Row, Image, Container } from "react-bootstrap";
+import {
+  Col,
+  Row,
+  Image,
+  Container,
+  Carousel as CarouselTop,
+  Button,
+} from "react-bootstrap";
 import Game from "../components/Game";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
@@ -20,7 +27,7 @@ const HomeScreen = ({ match }) => {
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 3,
+      items: 4,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
@@ -37,14 +44,14 @@ const HomeScreen = ({ match }) => {
   const gameList = useSelector((state) => state.gameList);
   const { loading, error, games } = gameList;
   const discountGames = [];
-  games.forEach((game) => (game.price <= 10 ? discountGames.push(game) : null));
+  games.forEach((game) => (game.price <= 30 ? discountGames.push(game) : null));
   useEffect(() => {
     dispatch(listGames(keyword));
   }, [dispatch, keyword]);
 
   return (
     <>
-      <h1>Latest Games</h1>
+      <h2 className="text-center py-lg-3">Games under $30</h2>
       <Container>
         {loading ? (
           <Loader />
@@ -53,10 +60,10 @@ const HomeScreen = ({ match }) => {
         ) : (
           <>
             <Row className="justify-content-center">
-              <Col>
-                {/* <Carousel responsive={responsive}>
+              <Col xs={30}>
+                <CarouselTop responsive={responsive}>
                   {discountGames.map((game) => (
-                    <Carousel.Item key={game._id}>
+                    <CarouselTop.Item key={game._id}>
                       <Link
                         to={`/game/${game._id}`}
                         style={{ textDecoration: "none" }}
@@ -68,13 +75,19 @@ const HomeScreen = ({ match }) => {
                           fluid
                         />
                       </Link>
-                    </Carousel.Item>
+                    </CarouselTop.Item>
                   ))}
-                </Carousel> */}
+                </CarouselTop>
               </Col>
             </Row>
-            <Row className="justify-content-center">
-              <Col className="text-center">
+            <Row
+              className="justify-content-center my-lg-3 py-lg-3 my-3 py-3"
+              style={{ borderTop: "solid", borderWidth: "0.5px" }}
+            >
+              <Col style={{ textAlign: "right" }}>
+                <Button variant="outline-light" className="btn-sm">
+                  View all
+                </Button>
                 <Carousel
                   className="w-100"
                   responsive={responsive}

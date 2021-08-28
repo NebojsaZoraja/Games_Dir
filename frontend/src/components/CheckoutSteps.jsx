@@ -54,10 +54,10 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
             to="/placeorder"
             style={{ backgroundColor: "limegreen" }}
           >
-            <Nav.Link>Claim Your Game</Nav.Link>
+            <Nav.Link>Place Your Order</Nav.Link>
           </LinkContainer>
         ) : (
-          <Nav.Link disabled>Claim Your Game</Nav.Link>
+          <Nav.Link disabled>Place Your Order</Nav.Link>
         )}
       </Nav.Item>
     </Nav>

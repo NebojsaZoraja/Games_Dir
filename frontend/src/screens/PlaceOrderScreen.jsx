@@ -41,7 +41,7 @@ const PlaceOrderScreen = ({ history }) => {
       <CheckoutSteps step1 step2 step3 step4 />
 
       <Row className="justify-content-center">
-        <Col lg={5}>
+        <Col lg={5} xs={10}>
           <Card variant="flush">
             <Card>
               <ListGroup variant="flush" className="">
@@ -66,7 +66,7 @@ const PlaceOrderScreen = ({ history }) => {
             </Card>
           </Card>
         </Col>
-        <Col lg={4}>
+        <Col lg={4} xs={10} className="my-2 my-lg-0 my-md-0">
           <Card variant="flush">
             <Card>
               <ListGroup variant="flush" className="">

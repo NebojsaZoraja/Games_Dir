@@ -26,7 +26,7 @@ router.get('/', asyncHandler(async (req, res) => {
 }));
 
 router.get('/paginate', asyncHandler(async (req, res) => {
-    const pageSize = 3;
+    const pageSize = 5;
     const page = Number(req.query.pageNumber) || 1
 
     const count = await Game.countDocuments();
