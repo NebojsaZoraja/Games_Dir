@@ -206,7 +206,7 @@ const GameEditScreen = ({ match, history }) => {
                       </Form.Group>
                       <Form.Group controlId="minRequiremens" className="my-1">
                         <Form.Label>
-                          Minimum Requirements: (Use "-" betwen component
+                          Minimum Requirements: (Use "_" betwen component
                           requirements)
                         </Form.Label>
                         <Form.Control
@@ -219,7 +219,7 @@ const GameEditScreen = ({ match, history }) => {
                       </Form.Group>
                       <Form.Group controlId="recRequiremens" className="my-1">
                         <Form.Label>
-                          Recommended Requirements: (Use "-" betwen component
+                          Recommended Requirements: (Use "_" betwen component
                           requirements)
                         </Form.Label>
                         <Form.Control

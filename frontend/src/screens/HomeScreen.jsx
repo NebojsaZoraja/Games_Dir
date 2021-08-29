@@ -92,6 +92,8 @@ const HomeScreen = ({ match }) => {
                   className="w-100"
                   responsive={responsive}
                   renderButtonGroupOutside={true}
+                  infinite={true}
+                  slidesToSlide={4}
                 >
                   {games.map((game) => (
                     <Col key={game._id}>

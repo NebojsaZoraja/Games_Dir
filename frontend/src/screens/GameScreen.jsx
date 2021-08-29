@@ -20,7 +20,6 @@ const GameScreen = ({ match, history }) => {
   const dispatch = useDispatch();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const [description, setDescription] = useState("");
   const [minReq, setMinReq] = useState([]);
   const [recReq, setRecReq] = useState([]);
 
@@ -44,7 +43,6 @@ const GameScreen = ({ match, history }) => {
     if (!loading) {
       setMinReq(game.minRequirements.toString().split("_"));
       setRecReq(game.recRequirements.toString().split("_"));
-      setDescription(game.description.toString());
     }
     dispatch(listGameDetails(match.params.id));
   }, [dispatch, match, successGameReview, game, loading]);
@@ -65,7 +63,7 @@ const GameScreen = ({ match, history }) => {
   return (
     <>
       <Link
-        className="btn btn-dark my-3"
+        className="btn btn-light my-3"
         to="/"
         style={{
           textDecoration: "none",
@@ -141,7 +139,11 @@ const GameScreen = ({ match, history }) => {
               <Card>
                 <ListGroup variant="flush">
                   <ListGroup.Item
-                    style={{ borderBottom: "solid", borderWidth: "0.5px" }}
+                    style={{
+                      textAlign: "center",
+                      borderBottom: "solid",
+                      borderWidth: "0.5px",
+                    }}
                   >
                     <h3>{game.title}</h3>
                     <Rating
@@ -152,7 +154,9 @@ const GameScreen = ({ match, history }) => {
                   <ListGroup.Item
                     style={{ borderBottom: "solid", borderWidth: "0.5px" }}
                   >
-                    {description}
+                    <p className="px-lg-5" style={{ whiteSpace: "pre-line" }}>
+                      {game.description}
+                    </p>
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <Row className="justify-content-center">

@@ -22,3 +22,7 @@ h3 {
     height: auto;
   }
 }
+
+.hovering:hover {
+  width: 30rem;
+}
