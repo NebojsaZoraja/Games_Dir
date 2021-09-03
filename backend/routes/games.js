@@ -5,7 +5,6 @@ import { Game } from '../models/gameModel.js';
 import { Genre } from '../models/genreModel.js';
 import asyncHandler from 'express-async-handler';
 import { validateObjectId } from '../middleware/validateObjectId.js';
-import games from '../data/games.js';
 
 const router = express.Router();
 
