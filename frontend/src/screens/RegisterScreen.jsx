@@ -42,7 +42,7 @@ const RegisterScreen = ({ location, history }) => {
       <Meta title="Register" />
       <Row className="justify-content-center my-lg-3 my-md-3 my-4">
         <Col lg={4} md={6}>
-          <Card className="p-2" style={{ backgroundColor: "indigo" }}>
+          <Card className="p-2" style={{ backgroundColor: "darkblue" }}>
             <h1 style={{ textAlign: "center" }}>Register</h1>
             {message && <Message variant="danger">{message}</Message>}
             {error && <Message variant="danger">{error}</Message>}
