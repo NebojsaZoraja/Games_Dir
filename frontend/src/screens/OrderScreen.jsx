@@ -6,8 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails, payOrder } from "../actions/orderActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import { ORDER_PAY_RESET } from "../constatns/orderConstants";
+import {
+  ORDER_CREATE_RESET,
+  ORDER_PAY_RESET,
+} from "../constatns/orderConstants";
 import { removeFromCart } from "../actions/cartActions";
+import Meta from "../components/Meta";
 
 const OrderScreen = ({ match, history }) => {
   const [open, setOpen] = useState(false);
@@ -16,7 +20,7 @@ const OrderScreen = ({ match, history }) => {
   const dispatch = useDispatch();
 
   const orderDetails = useSelector((state) => state.orderDetails);
-  const { order, loading, error } = orderDetails;
+  let { order, loading, error } = orderDetails;
 
   const orderPay = useSelector((state) => state.orderPay);
   const { loading: loadingPay, success: successPay } = orderPay;
@@ -35,7 +39,7 @@ const OrderScreen = ({ match, history }) => {
       document.body.appendChild(script);
     };
 
-    if (!order || successPay) {
+    if (!order || successPay || order._id !== orderId) {
       dispatch(getOrderDetails(orderId));
       dispatch({ type: ORDER_PAY_RESET });
     } else if (!order.isPaid) {
@@ -54,6 +58,7 @@ const OrderScreen = ({ match, history }) => {
 
   const handleBackToHome = () => {
     history.replace("/");
+    dispatch({ type: ORDER_CREATE_RESET });
   };
 
   return loading ? (
@@ -62,6 +67,7 @@ const OrderScreen = ({ match, history }) => {
     <Message variant="danger">{error}</Message>
   ) : (
     <>
+      <Meta title={`Order | ${order.orderItem.title}`} />
       <Button variant="dark" onClick={handleBackToHome}>
         Back to Homepage
       </Button>

@@ -9,22 +9,28 @@ const router = express.Router();
 
 //GET
 
-router.get('/', asyncHandler(async (req, res, next) => {
-    let genres = await Genre.find().sort('name');
+router.get('/', asyncHandler(async (req, res) => {
+    const genres = await Genre.find().sort('name');
     res.json(genres);
 }));
+
+router.get('/:id', [auth, admin], asyncHandler(async (req, res) => {
+    const genre = await Genre.findById(req.params.id)
+    if (genre) {
+        res.status(201);
+        res.json(genre);
+    } else {
+        res.status(404);
+        throw new Error("Genre not found");
+    }
+}))
 
 //POST
 
 router.post('/', [auth, admin], asyncHandler(async (req, res) => {
-    let { error } = validateGenre(req.body);
-    if (error) {
-        res.status(400);
-        throw new Error(error.message);
-    }
-
-    let genre = new Genre({ name: req.body.name });
+    let genre = new Genre({ name: "Sample Genre" });
     genre = await genre.save();
+    res.status(201);
 
     res.json(genre);
 }));
@@ -32,22 +38,20 @@ router.post('/', [auth, admin], asyncHandler(async (req, res) => {
 //PUT
 
 router.put('/:id', [auth, validateObjectId], asyncHandler(async (req, res) => {
-    let { error } = validateGenre(req.body);
-    if (error) {
-        res.status(400);
-        throw new Error(error.message);
-    }
 
-    const genre = await Genre.findByIdAndUpdate(req.params.id, { name: req.body.name }, {
-        new: true
-    });
+    const genre = await Genre.findById(req.params.id)
+
+    if (genre) {
+        genre.name = req.body.name
+    }
+    const updatedGenre = await genre.save();
 
     if (!genre) {
         res.status(404);
         throw new Error("The genre with the given ID was not found.");
     }
 
-    res.json(genre);
+    res.json(updatedGenre);
 }));
 
 //DELETE

@@ -87,7 +87,7 @@ export const payOrder = (orderId, paymentResult) => async (dispatch, getState) =
     }
 }
 
-export const listmyOrders = () => async (dispatch, getState) => {
+export const listmyOrders = (pageNumber = '') => async (dispatch, getState) => {
     try {
         dispatch({
             type: ORDER_LIST_MY_REQUEST
@@ -100,7 +100,7 @@ export const listmyOrders = () => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.get(`/api/orders/myorders`, config);
+        const { data } = await axios.get(`/api/orders/myorders?pageNumber=${pageNumber}`, config);
 
         dispatch({
             type: ORDER_LIST_MY_SUCCESS,

@@ -26,3 +26,8 @@ h3 {
 .hovering:hover {
   width: 30rem;
 }
+
+.page-item.active .page-link {
+  color: rgb(0, 0, 0) !important;
+  background-color: orange !important;
+}

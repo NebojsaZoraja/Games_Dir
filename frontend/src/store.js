@@ -5,6 +5,7 @@ import { gameCreateReducer, gameDeleteReducer, gameDetailsReducer, gameGenresRed
 import { userDeleteReducer, userDetailsReducer, userListReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer, userUpdateReducer } from './reducers/userReducers';
 import { cartReducer } from './reducers/cartReducers';
 import { orderCreateReducer, orderDetailsReducer, orderListMyReducer, orderPayReducer } from './reducers/orderReducers';
+import { genresListReducer, genreCreateReducer, genreUpdateReducer, genreDetailsReducer, genreDeleteReducer } from './reducers/genreReducers';
 
 const reducer = combineReducers({
     gameList: gameListReducer,
@@ -15,6 +16,11 @@ const reducer = combineReducers({
     gameCreate: gameCreateReducer,
     gameUpdate: gameUpdateReducer,
     gameReviewCreate: gameReviewCreateReducer,
+    genresList: genresListReducer,
+    genreCreate: genreCreateReducer,
+    genreUpdate: genreUpdateReducer,
+    genreDetails: genreDetailsReducer,
+    genreDelete: genreDeleteReducer,
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,

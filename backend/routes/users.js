@@ -11,8 +11,13 @@ import asyncHandler from 'express-async-handler';
 const router = express.Router();
 
 router.get('/', [auth, admin], asyncHandler(async (req, res) => {
-    const users = await User.find({});
-    res.json(users);
+    const pageSize = 10;
+    const page = Number(req.query.pageNumber) || 1;
+
+    const count = await User.countDocuments();
+
+    const users = await User.find({}).limit(pageSize).skip(pageSize * (page - 1));
+    res.json({ users, page, pages: Math.ceil(count / pageSize) });
 }))
 
 //GET

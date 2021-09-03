@@ -5,7 +5,7 @@ import Rating from "./Rating";
 
 const Game = ({ game }) => {
   return (
-    <Card className="mx-2 my-4">
+    <Card className="mx-1 my-3 bg-light">
       <Link to={`/game/${game._id}`} style={{ textDecoration: "none" }}>
         <Card.Img src={game.image} variant="top flush" />
         <Card.Body>

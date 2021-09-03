@@ -10,6 +10,7 @@ import {
   GAME_GENRE_RESET,
 } from "../constatns/gameConstatns";
 import Paginate from "../components/Paginate";
+import Meta from "../components/Meta";
 
 const GameListScreen = ({ history, match }) => {
   const dispatch = useDispatch();
@@ -69,6 +70,7 @@ const GameListScreen = ({ history, match }) => {
 
   return (
     <>
+      <Meta title="Admin | Game List" />
       <Row
         className="my-3"
         style={{ borderBottom: "solid", borderWidth: "0.5px" }}
@@ -135,7 +137,7 @@ const GameListScreen = ({ history, match }) => {
                   ))}
                 </tbody>
               </Table>
-              <Paginate pages={pages} page={page} />
+              <Paginate pages={pages} page={page} games={true} />
             </Card>
           </Col>
         </Row>

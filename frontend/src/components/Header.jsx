@@ -26,7 +26,16 @@ const Header = ({ history }) => {
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>Games-Dir</Navbar.Brand>
+            <Navbar.Brand>
+              <img
+                src="/logo.png"
+                width="40"
+                height="40"
+                className="d-inline-block align-center mx-1"
+                alt="Games Dir logo"
+              />
+              Games-Dir
+            </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -84,6 +93,9 @@ const Header = ({ history }) => {
                   </LinkContainer>
                   <LinkContainer to="/admin/gamelist">
                     <NavDropdown.Item>Manage Games</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/genreslist">
+                    <NavDropdown.Item>Manage Genres</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
               )}

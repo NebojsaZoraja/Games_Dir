@@ -14,6 +14,7 @@ import {
   GAME_UPDATE_RESET,
 } from "../constatns/gameConstatns";
 import axios from "axios";
+import Meta from "../components/Meta";
 
 const GameEditScreen = ({ match, history }) => {
   const gameId = match.params.id;
@@ -107,6 +108,7 @@ const GameEditScreen = ({ match, history }) => {
 
   return (
     <>
+      <Meta title="Admin | Edit Game" />
       <Link to="/admin/gamelist" className="btn btn-dark my-3">
         Go Back
       </Link>
@@ -236,7 +238,7 @@ const GameEditScreen = ({ match, history }) => {
                           variant="primary"
                           className="my-2"
                         >
-                          Update
+                          Submit
                         </Button>
                       </Form.Group>
                     </Col>

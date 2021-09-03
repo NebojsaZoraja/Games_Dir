@@ -20,14 +20,22 @@ router.get('/', asyncHandler(async (req, res) => {
         }
     } : {}
 
-    const games = await Game.find({ ...keyword }).populate('genre', ' name ')
+    const games = await Game.find({ ...keyword }).populate('genre', ' name ');
 
     res.json(games);
 }));
 
+router.get('/homepage', asyncHandler(async (req, res) => {
+    const games = await Game.find({}).populate('genre', ' name ').limit(25);
+
+    res.json(games);
+}));
+
+
+
 router.get('/paginate', asyncHandler(async (req, res) => {
-    const pageSize = 5;
-    const page = Number(req.query.pageNumber) || 1
+    const pageSize = 10;
+    const page = Number(req.query.pageNumber) || 1;
 
     const count = await Game.countDocuments();
 

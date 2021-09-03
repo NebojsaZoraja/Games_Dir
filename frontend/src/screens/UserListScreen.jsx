@@ -5,12 +5,15 @@ import { listUsers, deleteUser } from "../actions/userActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { Button, Card, Col, Row, Table } from "react-bootstrap";
+import Meta from "../components/Meta";
+import Paginate from "../components/Paginate";
 
-const UserListScreen = ({ history }) => {
+const UserListScreen = ({ history, match }) => {
   const dispatch = useDispatch();
+  const pageNumber = match.params.pageNumber || 1;
 
   const userList = useSelector((state) => state.userList);
-  const { loading, error, users } = userList;
+  const { loading, error, users, pages, page } = userList;
 
   const userDelete = useSelector((state) => state.userDelete);
   const { success: successDelete } = userDelete;
@@ -19,12 +22,12 @@ const UserListScreen = ({ history }) => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listUsers());
+    if ((userInfo && userInfo.isAdmin) || successDelete) {
+      dispatch(listUsers(pageNumber));
     } else {
       history.push("/login");
     }
-  }, [dispatch, userInfo, history, successDelete]);
+  }, [dispatch, userInfo, history, successDelete, pageNumber]);
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure")) {
@@ -34,6 +37,7 @@ const UserListScreen = ({ history }) => {
 
   return (
     <>
+      <Meta title="Admin | User List" />
       <Row
         className="my-3"
         style={{ borderBottom: "solid", borderWidth: "0.5px" }}
@@ -98,6 +102,7 @@ const UserListScreen = ({ history }) => {
                   ))}
                 </tbody>
               </Table>
+              <Paginate pages={pages} page={page} users={true} />
             </Card>
           </Col>
         </Row>

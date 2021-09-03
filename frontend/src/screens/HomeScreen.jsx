@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Meta from "../components/Meta";
 import {
   Col,
   Row,
@@ -12,45 +13,47 @@ import Game from "../components/Game";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { Link } from "react-router-dom";
-import { listGames } from "../actions/gameActions";
+import { listGamesHomePage } from "../actions/gameActions";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
-const HomeScreen = ({ match }) => {
+const HomeScreen = ({ match, history }) => {
   const dispatch = useDispatch();
 
   const responsive = {
     superLargeDesktop: {
-      // the naming can be any, depends on you.
       breakpoint: { max: 4000, min: 3000 },
       items: 5,
+      slidesToSlide: 5,
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
       items: 4,
+      slidesToSlide: 4,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
       items: 2,
+      slidesToSlide: 3,
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
       items: 1,
+      slidesToSlide: 1,
     },
   };
 
-  const keyword = match.params.keyword;
-
   const gameList = useSelector((state) => state.gameList);
   const { loading, error, games } = gameList;
-  const discountGames = [];
-  games.forEach((game) => (game.price <= 30 ? discountGames.push(game) : null));
   useEffect(() => {
-    dispatch(listGames(keyword));
-  }, [dispatch, keyword]);
+    dispatch(listGamesHomePage());
+  }, [dispatch]);
+
+  const handleViewAll = () => history.push("/games");
 
   return (
     <>
+      <Meta title="Games-Dir | Home" />
       <h2 className="text-center py-lg-3">Games under $30</h2>
       <Container>
         {loading ? (
@@ -62,21 +65,24 @@ const HomeScreen = ({ match }) => {
             <Row className="justify-content-center">
               <Col xs={30}>
                 <CarouselTop responsive={responsive}>
-                  {discountGames.map((game) => (
-                    <CarouselTop.Item key={game._id}>
-                      <Link
-                        to={`/game/${game._id}`}
-                        style={{ textDecoration: "none" }}
-                      >
-                        <Image
-                          src={game.image}
-                          alt={game.title}
-                          className="d-block w-100"
-                          fluid
-                        />
-                      </Link>
-                    </CarouselTop.Item>
-                  ))}
+                  {games.map(
+                    (game) =>
+                      game.price < 30 && (
+                        <CarouselTop.Item key={game._id}>
+                          <Link
+                            to={`/game/${game._id}`}
+                            style={{ textDecoration: "none" }}
+                          >
+                            <Image
+                              src={game.image}
+                              alt={game.title}
+                              className="d-block w-100"
+                              fluid
+                            />
+                          </Link>
+                        </CarouselTop.Item>
+                      )
+                  )}
                 </CarouselTop>
               </Col>
             </Row>
@@ -85,7 +91,11 @@ const HomeScreen = ({ match }) => {
               style={{ borderTop: "solid", borderWidth: "0.5px" }}
             >
               <Col style={{ textAlign: "right" }}>
-                <Button variant="outline-light" className="btn-sm">
+                <Button
+                  variant="outline-light"
+                  className="btn-sm"
+                  onClick={handleViewAll}
+                >
                   View all
                 </Button>
                 <Carousel
@@ -93,7 +103,6 @@ const HomeScreen = ({ match }) => {
                   responsive={responsive}
                   renderButtonGroupOutside={true}
                   infinite={true}
-                  slidesToSlide={4}
                 >
                   {games.map((game) => (
                     <Col key={game._id}>

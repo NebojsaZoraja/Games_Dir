@@ -7,22 +7,23 @@ import {
   Container,
   Card,
   Table,
-  Collapse,
-  Dropdown,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
 import { listmyOrders } from "../actions/orderActions";
+import Paginate from "../components/Paginate";
+import Meta from "../components/Meta";
 
-const ProfileScreen = ({ location, history }) => {
-  const [open, setOpen] = useState(false);
+const ProfileScreen = ({ location, history, match }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
+
+  const pageNumber = match.params.pageNumber || 1;
 
   const dispatch = useDispatch();
 
@@ -36,7 +37,13 @@ const ProfileScreen = ({ location, history }) => {
   const { success } = userUpdateProfile;
 
   const orderListMy = useSelector((state) => state.orderListMy);
-  const { orders, loading: loadingOrders, error: errorOrders } = orderListMy;
+  const {
+    orders,
+    loading: loadingOrders,
+    error: errorOrders,
+    page,
+    pages,
+  } = orderListMy;
 
   useEffect(() => {
     if (!userInfo) {
@@ -44,13 +51,13 @@ const ProfileScreen = ({ location, history }) => {
     } else {
       if (!user.name) {
         dispatch(getUserDetails("profile"));
-        dispatch(listmyOrders());
       } else {
         setName(userInfo.name);
         setEmail(userInfo.email);
       }
+      dispatch(listmyOrders(pageNumber));
     }
-  }, [history, userInfo, dispatch, user]);
+  }, [history, userInfo, dispatch, user, pageNumber]);
 
   const handleOrder = (id) => {
     history.push(`/order/${id}`);
@@ -67,13 +74,14 @@ const ProfileScreen = ({ location, history }) => {
 
   return (
     <Container>
+      <Meta title={`Profile | ${name}`} />
       <Row className="justify-content-center my-lg-5 my-md-5 my-4">
         <Col
           md={6}
           lg={5}
           style={{ borderRight: "solid", borderWidth: "0.5px" }}
         >
-          <Card className="p-2 m-lg-3 bg-dark">
+          <Card className="p-2 m-lg-3" style={{ backgroundColor: "darkblue" }}>
             <h2 style={{ textAlign: "center" }}>User Profile</h2>
             {message && <Message variant="danger">{message}</Message>}
             {error && <Message variant="danger">{error}</Message>}
@@ -131,45 +139,31 @@ const ProfileScreen = ({ location, history }) => {
           ) : errorOrders ? (
             <Message variant="danger">{errorOrders}</Message>
           ) : (
-            <>
-              <Button
-                variant="dark"
-                style={{
-                  width: "100%",
-                }}
-                onClick={() => setOpen(!open)}
-                aria-controls="example-collapse-text"
-                aria-expanded={open}
-              >
-                Click to view all of your purchases
-              </Button>
-              <Collapse in={open} className="my-1">
-                <Dropdown>
-                  <Table striped bordered hover responsive className="table-sm">
-                    <thead>
-                      <tr>
-                        <th>NAME</th>
-                        <th>TOTAL</th>
-                        <th>Purchased on</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {orders.map((order) => (
-                        <tr
-                          key={order._id}
-                          onClick={() => handleOrder(order._id)}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <td>{order.orderItem.title}</td>
-                          <td>${order.totalPrice}</td>
-                          <td>{order.updatedAt.substring(0, 10)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </Dropdown>
-              </Collapse>
-            </>
+            <Card className="p-1" style={{ backgroundColor: "darkblue" }}>
+              <Table striped borderless hover responsive className="table-sm">
+                <thead>
+                  <tr>
+                    <th>NAME</th>
+                    <th>TOTAL</th>
+                    <th>Purchased on</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr
+                      key={order._id}
+                      onClick={() => handleOrder(order._id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <td>{order.orderItem.title}</td>
+                      <td>${order.totalPrice}</td>
+                      <td>{order.updatedAt.substring(0, 10)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <Paginate pages={pages} page={page} orders={true} />
+            </Card>
           )}
         </Col>
       </Row>

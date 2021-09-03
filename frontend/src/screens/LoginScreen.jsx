@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { autoLogout, login } from "../actions/userActions";
+import Meta from "../components/Meta";
 
 const LoginScreen = ({ location, history }) => {
   const [email, setEmail] = useState("");
@@ -33,9 +34,10 @@ const LoginScreen = ({ location, history }) => {
 
   return (
     <Container>
+      <Meta title="Login" />
       <Row className="justify-content-center my-lg-5 my-md-5 my-4">
         <Col lg={4} md={6}>
-          <Card className="p-2" style={{ backgroundColor: "indigo" }}>
+          <Card className="p-2" style={{ backgroundColor: "darkblue" }}>
             <h1 style={{ textAlign: "center" }}>Sign In</h1>
             {error && <Message variant="danger">{error}</Message>}
             {loading && <Loader />}

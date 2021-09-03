@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { register } from "../actions/userActions";
+import Meta from "../components/Meta";
 
 const RegisterScreen = ({ location, history }) => {
   const [name, setName] = useState("");
@@ -38,6 +39,7 @@ const RegisterScreen = ({ location, history }) => {
 
   return (
     <Container>
+      <Meta title="Register" />
       <Row className="justify-content-center my-lg-3 my-md-3 my-4">
         <Col lg={4} md={6}>
           <Card className="p-2" style={{ backgroundColor: "indigo" }}>

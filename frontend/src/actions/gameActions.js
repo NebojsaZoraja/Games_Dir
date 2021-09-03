@@ -37,6 +37,24 @@ export const listGames = (keyword = '') => async (dispatch) => {
     }
 }
 
+export const listGamesHomePage = () => async (dispatch) => {
+    try {
+        dispatch({ type: GAME_LIST_REQUEST });
+
+        const { data } = await axios.get(`/api/games/homepage`);
+
+        dispatch({
+            type: GAME_LIST_SUCCESS,
+            payload: data
+        })
+    } catch (error) {
+        dispatch({
+            type: GAME_LIST_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+        })
+    }
+}
+
 export const listGameDetails = (id) => async (dispatch) => {
     try {
         dispatch({ type: GAME_DETAILS_REQUEST });

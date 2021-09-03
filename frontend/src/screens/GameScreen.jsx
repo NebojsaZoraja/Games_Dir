@@ -15,6 +15,7 @@ import { listGameDetails, createGameReview } from "../actions/gameActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { GAME_CREATE_REVIEW_RESET } from "../constatns/gameConstatns";
+import Meta from "../components/Meta";
 
 const GameScreen = ({ match, history }) => {
   const dispatch = useDispatch();
@@ -62,15 +63,16 @@ const GameScreen = ({ match, history }) => {
 
   return (
     <>
-      <Link
+      <Meta title={game.title} />
+      <Button
         className="btn btn-light my-3"
-        to="/"
+        onClick={() => history.goBack()}
         style={{
           textDecoration: "none",
         }}
       >
         Go back
-      </Link>
+      </Button>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -87,7 +89,7 @@ const GameScreen = ({ match, history }) => {
               />
             </Col>
             <Col md={4} sm={4} lg={3} xs={12} className="mt-2 mt-lg-4 mt-md-0">
-              <Card>
+              <Card bg="light">
                 <ListGroup style={{ width: "100%" }}>
                   <ListGroup.Item
                     style={{ borderBottom: "solid", borderWidth: "0.5px" }}
@@ -136,7 +138,7 @@ const GameScreen = ({ match, history }) => {
           >
             <h2 className="text-center">Description</h2>
             <Col lg={10}>
-              <Card>
+              <Card bg="light">
                 <ListGroup variant="flush">
                   <ListGroup.Item
                     style={{
@@ -146,6 +148,7 @@ const GameScreen = ({ match, history }) => {
                     }}
                   >
                     <h3>{game.title}</h3>
+                    <h5>Publisher: {game.publisher}</h5>
                     <Rating
                       value={game.rating}
                       text={`${game.numReviews} reviews`}
