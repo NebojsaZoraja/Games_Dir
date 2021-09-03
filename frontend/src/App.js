@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container } from 'react-bootstrap'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import Footer from './components/Footer';
 import Header from './components/Header';
 import HomeScreen from './screens/HomeScreen';
@@ -22,6 +22,7 @@ import ScrollToTop from './components/ScrollToTop';
 import GameSearch from './screens/GameSearch';
 import GenresListScreen from './screens/GenresListScreen';
 import GenreEditScreen from './screens/GenreEditScreen';
+import NotFoundScreen from './screens/NotFoundScreen';
 
 
 function App() {
@@ -54,6 +55,8 @@ function App() {
               <Route path="/admin/genreslist/:id/edit" component={GenreEditScreen} />
               <Route path="/admin/userlist/:pageNumber" component={UserListScreen} exact />
               <Route path="/" component={HomeScreen} exact />
+              <Route path="/not-found" component={NotFoundScreen} exact />
+              <Redirect to="/not-found" />
             </Switch>
           </ScrollToTop>
         </Container>

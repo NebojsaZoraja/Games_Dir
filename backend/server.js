@@ -1,25 +1,28 @@
 import express from 'express';
-import path from 'node:path';
+import path from 'path';
 const app = express();
 import 'colors';
 import { env } from './startup/env.js';
 import { routes } from './startup/routes.js';
 import { db } from './startup/db.js';
-import { prod } from './startup/prod.js'
-import morgan from 'morgan';
-
-const __dirname = path.resolve();
 
 
-
-app.use("/uploads", express.static(path.join(__dirname, '/uploads')));
 env();
 routes(app);
 db();
-prod(app);
-if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'))
+
+
+
+const __dirname = path.resolve();
+
+app.use("/uploads", express.static(path.join(__dirname, '/uploads')));
+
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '/frontend/build')))
+    app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')));
 }
+
 
 const port = process.env.PORT || 5000;
 
