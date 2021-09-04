@@ -1,6 +1,4 @@
-import Joi from 'joi';
 import mongoose from 'mongoose';
-import { genreSchema } from './genreModel.js';
 
 const reviewSchema = mongoose.Schema(
     {
@@ -16,7 +14,7 @@ const reviewSchema = mongoose.Schema(
     {
         timestamps: true
     }
-)
+);
 
 const gameSchema = mongoose.Schema({
 

@@ -20,7 +20,7 @@ function checkFileType(file, cb) {
     const mimetype = filetypes.test(file.mimetype);
 
     if (extname && mimetype) {
-        return cb(null, true)
+        return cb(null, true);
     } else {
         cb('Images only!');
     }
@@ -29,7 +29,7 @@ function checkFileType(file, cb) {
 const upload = multer({
     storage,
     fileFilter: function (req, file, cb) {
-        checkFileType(file, cb)
+        checkFileType(file, cb);
     }
 })
 

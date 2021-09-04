@@ -10,6 +10,8 @@ import asyncHandler from 'express-async-handler';
 
 const router = express.Router();
 
+//GET USER LIST FOR PAGINATION
+
 router.get('/', [auth, admin], asyncHandler(async (req, res) => {
     const pageSize = 10;
     const page = Number(req.query.pageNumber) || 1;
@@ -20,7 +22,7 @@ router.get('/', [auth, admin], asyncHandler(async (req, res) => {
     res.json({ users, page, pages: Math.ceil(count / pageSize) });
 }))
 
-//GET
+//GET USER PROFILE
 
 router.get('/profile', auth, asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id).select('-password');
@@ -31,7 +33,7 @@ router.get('/profile', auth, asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
-        })
+        });
     } else {
         res.status(404);
         throw new Error('User not found');
@@ -51,7 +53,7 @@ router.get('/:id', [auth, admin], asyncHandler(async (req, res) => {
 
 }))
 
-//POST
+//POST NEW USER
 
 router.post('/', asyncHandler(async (req, res) => {
     const { error } = validateUser(req.body);
@@ -86,6 +88,8 @@ router.post('/', asyncHandler(async (req, res) => {
     }
 }));
 
+//POST LOGIN USER
+
 router.post('/login', asyncHandler(async (req, res) => {
     const { error } = validateLogin(req.body);
     if (error) {
@@ -115,10 +119,10 @@ router.post('/login', asyncHandler(async (req, res) => {
     })
 }));
 
-//PUT
+//PUT UPDATE USER PROFILE
 
 router.put('/profile', auth, asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id)
+    const user = await User.findById(req.user._id);
     const salt = await bcrypt.genSalt(10);
     if (user) {
         user.name = req.body.name || user.name
@@ -136,20 +140,20 @@ router.put('/profile', auth, asyncHandler(async (req, res) => {
             token: updatedUser.generateAuthToken()
         });
     } else {
-        res.status(404)
-        throw new Error('User not found')
+        res.status(404);
+        throw new Error('User not found');
     }
 }));
 
 //PUT UPDATE USER ADMIN
 
 router.put('/:id', [auth, admin], asyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id)
+    const user = await User.findById(req.params.id);
 
     if (user) {
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
-        user.isAdmin = req.body.isAdmin
+        user.isAdmin = req.body.isAdmin;
 
         const updatedUser = await user.save();
 
@@ -160,8 +164,8 @@ router.put('/:id', [auth, admin], asyncHandler(async (req, res) => {
             isAdmin: updatedUser.isAdmin,
         });
     } else {
-        res.status(404)
-        throw new Error('User not found')
+        res.status(404);
+        throw new Error('User not found');
     }
 }));
 

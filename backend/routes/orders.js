@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get('/myorders', auth, asyncHandler(async (req, res) => {
     const pageSize = 10;
-    const page = Number(req.query.pageNumber) || 1
+    const page = Number(req.query.pageNumber) || 1;
 
     const count = await Order.find({ user: req.user._id }).countDocuments();
 
@@ -21,13 +21,13 @@ router.get('/myorders', auth, asyncHandler(async (req, res) => {
 }))
 
 
-//GET order
+//GET ORDER BY ID
 
 router.get('/:id', auth, asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id).populate('user', 'name email');
 
     if (order) {
-        res.json(order)
+        res.json(order);
     } else {
         res.status(404);
         throw new Error("Order not found");
@@ -37,7 +37,7 @@ router.get('/:id', auth, asyncHandler(async (req, res) => {
 
 
 
-//Create order POST
+//POST CREATE ORDER
 
 router.post('/', auth, asyncHandler(async (req, res) => {
     const { orderItem, paymentMethod, totalPrice, } = req.body;
@@ -52,7 +52,7 @@ router.post('/', auth, asyncHandler(async (req, res) => {
         })
     }
     order.save();
-    res.status(201)
+    res.status(201);
     res.json(order);
 }))
 
@@ -63,7 +63,7 @@ router.put('/:id/pay', auth, asyncHandler(async (req, res) => {
 
         order.isPaid = true,
             order.productKey = generate(),
-            order.paymentResult = {
+            order.paymentResult = {         //Paypal api
                 id: req.body.id,
                 status: req.body.status,
                 update_time: req.body.update_time,

@@ -47,5 +47,5 @@ const validateUser = (user) => {
     return schema.validate(user);
 };
 
-export default User
+export default User;
 export { validateUser, userSchema };

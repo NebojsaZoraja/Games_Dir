@@ -1,4 +1,4 @@
-import { Genre, validateGenre } from '../models/genreModel.js'
+import { Genre } from '../models/genreModel.js'
 import express from 'express';
 import admin from '../middleware/admin.js'
 import { auth } from '../middleware/auth.js';
@@ -7,15 +7,17 @@ import { validateObjectId } from '../middleware/validateObjectId.js';
 
 const router = express.Router();
 
-//GET
+//GET ALL GENRES
 
 router.get('/', asyncHandler(async (req, res) => {
     const genres = await Genre.find().sort('name');
     res.json(genres);
 }));
 
+//GET GENRES BY ID
+
 router.get('/:id', [auth, admin], asyncHandler(async (req, res) => {
-    const genre = await Genre.findById(req.params.id)
+    const genre = await Genre.findById(req.params.id);
     if (genre) {
         res.status(201);
         res.json(genre);
@@ -25,7 +27,7 @@ router.get('/:id', [auth, admin], asyncHandler(async (req, res) => {
     }
 }))
 
-//POST
+//POST NEW GENRE
 
 router.post('/', [auth, admin], asyncHandler(async (req, res) => {
     let genre = new Genre({ name: "Sample Genre" });
@@ -35,14 +37,14 @@ router.post('/', [auth, admin], asyncHandler(async (req, res) => {
     res.json(genre);
 }));
 
-//PUT
+//PUT UPDATE GENRE
 
 router.put('/:id', [auth, validateObjectId], asyncHandler(async (req, res) => {
 
-    const genre = await Genre.findById(req.params.id)
+    const genre = await Genre.findById(req.params.id);
 
     if (genre) {
-        genre.name = req.body.name
+        genre.name = req.body.name;
     }
     const updatedGenre = await genre.save();
 
@@ -54,7 +56,7 @@ router.put('/:id', [auth, validateObjectId], asyncHandler(async (req, res) => {
     res.json(updatedGenre);
 }));
 
-//DELETE
+//DELETE GENRE
 
 router.delete('/:id', [auth, admin, validateObjectId], asyncHandler(async (req, res) => {
     const genre = await Genre.findByIdAndRemove(req.params.id);

@@ -1,13 +1,14 @@
 import express from 'express';
-const app = express();
 import 'colors';
 import { env } from './startup/env.js';
 import { routes } from './startup/routes.js';
 import { db } from './startup/db.js';
 
-env();
-db();
-routes(app);
+const app = express();
+
+env();          //.env setup
+db();          // db connection
+routes(app);  // api routes
 
 const port = process.env.PORT || 5000;
 

@@ -2,13 +2,12 @@ import express from 'express';
 import admin from '../middleware/admin.js'
 import { auth } from '../middleware/auth.js';
 import { Game } from '../models/gameModel.js';
-import { Genre } from '../models/genreModel.js';
 import asyncHandler from 'express-async-handler';
 import { validateObjectId } from '../middleware/validateObjectId.js';
 
 const router = express.Router();
 
-//GET
+//GET ALL GAMES + SEARCH
 
 router.get('/', asyncHandler(async (req, res) => {
 
@@ -24,13 +23,15 @@ router.get('/', asyncHandler(async (req, res) => {
     res.json(games);
 }));
 
+//GET LIMITED NUMBER OF GAMES FOR HOMEPAGE
+
 router.get('/homepage', asyncHandler(async (req, res) => {
     const games = await Game.find({}).populate('genre', ' name ').limit(25);
 
     res.json(games);
 }));
 
-
+//GET GAMES FOR ADMIN GAME LIST, PAGINATION
 
 router.get('/paginate', asyncHandler(async (req, res) => {
     const pageSize = 10;
@@ -42,7 +43,7 @@ router.get('/paginate', asyncHandler(async (req, res) => {
     res.json({ games, page, pages: Math.ceil(count / pageSize) });
 }));
 
-//GET:ID
+//GET GAME BY ID
 
 router.get('/:id', validateObjectId, asyncHandler(async (req, res) => {
     const game = await Game.findById(req.params.id).populate('genre', ' name ');
@@ -56,7 +57,7 @@ router.get('/:id', validateObjectId, asyncHandler(async (req, res) => {
     }
 }));
 
-//POST
+//POST NEW GAME
 
 router.post('/', [auth, admin], asyncHandler(async (req, res) => {
     let game = new Game({
@@ -73,7 +74,7 @@ router.post('/', [auth, admin], asyncHandler(async (req, res) => {
     });
 
     const createdGame = await game.save();
-    res.status(201).json(createdGame)
+    res.status(201).json(createdGame);
 }));
 
 //POST REVIEW
@@ -84,7 +85,7 @@ router.post('/:id/reviews', [auth, validateObjectId], asyncHandler(async (req, r
     const game = await Game.findById(req.params.id).populate('genre', ' name ');
 
     if (game) {
-        const alreadyReviewed = game.reviews.find((r) => r.user.toString() === req.user._id.toString())
+        const alreadyReviewed = game.reviews.find((r) => r.user.toString() === req.user._id.toString());
 
         if (alreadyReviewed) {
             res.status(400);
@@ -96,12 +97,12 @@ router.post('/:id/reviews', [auth, validateObjectId], asyncHandler(async (req, r
             rating: Number(rating),
             comment,
             user: req.user._id,
-        }
+        };
 
-        game.reviews.push(review)
-        game.numReviews = game.reviews.length
+        game.reviews.push(review);
+        game.numReviews = game.reviews.length;
 
-        game.rating = game.reviews.reduce((acc, item) => item.rating + acc, 0) / game.reviews.length
+        game.rating = game.reviews.reduce((acc, item) => item.rating + acc, 0) / game.reviews.length;
 
         await game.save();
         res.status(201).json({ message: "Review added" });
@@ -109,7 +110,7 @@ router.post('/:id/reviews', [auth, validateObjectId], asyncHandler(async (req, r
 
 }))
 
-//PUT
+//PUT UPDATE GAME
 
 router.put('/:id', [validateObjectId, auth, admin], asyncHandler(async (req, res) => {
 
@@ -137,7 +138,7 @@ router.put('/:id', [validateObjectId, auth, admin], asyncHandler(async (req, res
 
 }));
 
-//DELETE
+//DELETE GAME
 
 router.delete('/:id', [auth, admin], asyncHandler(async (req, res) => {
     const game = await Game.findByIdAndRemove(req.params.id);
@@ -146,8 +147,8 @@ router.delete('/:id', [auth, admin], asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("The game with the given ID was not found.");
     } else {
-        await game.remove()
-        res.json({ message: 'Game removed' })
+        await game.remove();
+        res.json({ message: 'Game removed' });
     }
 }));
 
