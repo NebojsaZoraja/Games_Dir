@@ -51,7 +51,7 @@ const GameEditScreen = ({ match, history }) => {
       dispatch({ type: GAME_GENRE_RESET });
       history.push("/admin/gamelist");
     } else {
-      if (!game.title || game._id !== gameId) {
+      if (!game.title || game._id !== gameId || genres.length === 0) {
         dispatch(getGameGenres());
         dispatch(listGameDetails(gameId));
       } else {
@@ -66,7 +66,7 @@ const GameEditScreen = ({ match, history }) => {
         setRecRequirements(game.recRequirements);
       }
     }
-  }, [game, dispatch, gameId, history, successUpdate]);
+  }, [game, dispatch, gameId, history, successUpdate, genres.length]);
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
@@ -114,7 +114,7 @@ const GameEditScreen = ({ match, history }) => {
       </Link>
       <Container>
         <Row className="justify-content-center my-lg-3 my-md-3 my-4">
-          <Col lg={7} md={6}>
+          <Col lg={8} md={6}>
             <Card className="p-2" bg="dark">
               <h1 style={{ textAlign: "center" }}>Edit Game</h1>
               {loadingUpdate && <Loader />}
@@ -148,6 +148,7 @@ const GameEditScreen = ({ match, history }) => {
                       <Form.Group controlId="genre" className="my-2">
                         <Form.Label>Genre:</Form.Label>
                         <Form.Select onChange={(e) => setGenre(e.target.value)}>
+                          <option value={game.genre._id}>Original genre</option>
                           {genres.map((g) => (
                             <option key={g._id} value={g._id}>
                               {g.name}
@@ -195,10 +196,11 @@ const GameEditScreen = ({ match, history }) => {
                     </Col>
                   </Row>
                   <Row className="justify-content-center">
-                    <Col className="text-center" lg={8}>
+                    <Col className="text-center" lg={10}>
                       <Form.Group controlId="description" className="my-1">
                         <Form.Label>Description:</Form.Label>
                         <Form.Control
+                          style={{ height: "15rem" }}
                           as="textarea"
                           type="text"
                           placeholder="Description..."
@@ -212,6 +214,7 @@ const GameEditScreen = ({ match, history }) => {
                           requirements)
                         </Form.Label>
                         <Form.Control
+                          style={{ height: "10rem" }}
                           as="textarea"
                           type="text"
                           placeholder="Minimum Requirements..."
@@ -225,6 +228,7 @@ const GameEditScreen = ({ match, history }) => {
                           requirements)
                         </Form.Label>
                         <Form.Control
+                          style={{ height: "10rem" }}
                           as="textarea"
                           type="text"
                           placeholder="Recommended Requirements..."

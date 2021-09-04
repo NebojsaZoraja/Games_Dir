@@ -89,7 +89,7 @@ const GameListScreen = ({ history, match }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <Row className="justify-content-center">
-          <Col lg={11} md={15}>
+          <Col lg={11} md={15} xs={15}>
             <Card className="p-1" style={{ backgroundColor: "darkblue" }}>
               <Table striped borderless hover responsive className="table-md">
                 <thead>

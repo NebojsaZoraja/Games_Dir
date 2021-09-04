@@ -54,7 +54,6 @@ const HomeScreen = ({ match, history }) => {
   return (
     <>
       <Meta title="Games-Dir | Home" />
-      <h2 className="text-center py-lg-3">Games under $30</h2>
       <Container>
         {loading ? (
           <Loader />
@@ -62,8 +61,9 @@ const HomeScreen = ({ match, history }) => {
           <Message variant="danger">{error}</Message>
         ) : (
           <>
+            <h3 className="text-center">Games under 30$</h3>
             <Row className="justify-content-center">
-              <Col xs={30}>
+              <Col xs={30} className="text-center">
                 <CarouselTop responsive={responsive}>
                   {games.map(
                     (game) =>
@@ -90,10 +90,12 @@ const HomeScreen = ({ match, history }) => {
               className="justify-content-center my-lg-3 py-lg-3 my-3 py-3"
               style={{ borderTop: "solid", borderWidth: "0.5px" }}
             >
+              <h2 className="text-center pt-lg-2">Game previews</h2>
+
               <Col style={{ textAlign: "right" }}>
                 <Button
                   variant="outline-light"
-                  className="btn-sm"
+                  className="btn-lg"
                   onClick={handleViewAll}
                 >
                   View all
