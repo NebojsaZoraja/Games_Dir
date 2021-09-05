@@ -1,6 +1,5 @@
 import express from 'express';
-import { auth } from '../middleware/auth.js';
-import admin from '../middleware/admin.js'
+import { auth, admin } from '../middleware/auth.js';
 import User from '../models/userModel.js';
 import { validateUser } from '../models/userModel.js';
 import Joi from 'joi';

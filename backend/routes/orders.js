@@ -56,6 +56,8 @@ router.post('/', auth, asyncHandler(async (req, res) => {
     res.json(order);
 }))
 
+//PUT ORDER PAYMENT
+
 router.put('/:id/pay', auth, asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
     const game = await Game.findById(order.orderItem.game);

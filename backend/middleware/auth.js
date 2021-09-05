@@ -24,4 +24,15 @@ const auth = asyncHandler(async (req, res, next) => {
     }
 });
 
-export { auth };
+const admin = (req, res, next) => {
+
+    if (!process.env.REQUIRE_AUTH) return next();
+
+    if (!req.user.isAdmin || !req.user) {
+        res.status(403)
+        throw new Error('Access denied.');
+    }
+    next();
+}
+
+export { auth, admin };

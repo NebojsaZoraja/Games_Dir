@@ -1,7 +1,6 @@
 import { Genre } from '../models/genreModel.js'
 import express from 'express';
-import admin from '../middleware/admin.js'
-import { auth } from '../middleware/auth.js';
+import { auth, admin } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
 import { validateObjectId } from '../middleware/validateObjectId.js';
 
