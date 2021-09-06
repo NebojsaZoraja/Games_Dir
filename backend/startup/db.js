@@ -10,4 +10,4 @@ const db = async () => {
         .then(() => console.log('Connected to MongoDB...'.blue.bold));
 }
 
-export { db };
+export default db;

@@ -5,7 +5,7 @@ import { router as games } from '../routes/games.js';
 import { router as users } from '../routes/users.js';
 import { router as orders } from '../routes/orders.js';
 import { router as uploads } from '../routes/uploads.js';
-import { errorHandler } from '../middleware/error.js';
+import errorHandler from '../middleware/error.js';
 
 const __dirname = path.resolve();
 
@@ -25,4 +25,4 @@ const routes = (app) => {
     }
 }
 
-export { routes };
+export default routes;

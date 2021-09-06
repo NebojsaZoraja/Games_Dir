@@ -4,4 +4,4 @@ const env = () => {
     dotenv.config();
 }
 
-export { env };
+export default env;
