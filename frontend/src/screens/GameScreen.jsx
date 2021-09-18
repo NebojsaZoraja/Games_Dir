@@ -33,7 +33,6 @@ const GameScreen = ({ match, history }) => {
 
   const gameDetails = useSelector((state) => state.gameDetails);
   const { loading, error, game } = gameDetails;
-
   useEffect(() => {
     if (successGameReview) {
       alert("Review Submitted!");
@@ -41,12 +40,12 @@ const GameScreen = ({ match, history }) => {
       setComment("");
       dispatch({ type: GAME_CREATE_REVIEW_RESET });
     }
-    if (!loading) {
+    if (!loading && !error) {
       setMinReq(game.minRequirements.toString().split("_"));
       setRecReq(game.recRequirements.toString().split("_"));
     }
     dispatch(listGameDetails(match.params.id));
-  }, [dispatch, match, successGameReview, game, loading]);
+  }, [dispatch, match, successGameReview, game, loading, error]);
 
   const buyNowHandler = () => {
     if (userInfo) {
@@ -63,7 +62,6 @@ const GameScreen = ({ match, history }) => {
 
   return (
     <>
-      <Meta title={game.title} />
       <Button
         className="btn btn-light my-3"
         onClick={() => history.goBack()}
@@ -79,6 +77,7 @@ const GameScreen = ({ match, history }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
+          <Meta title={game.title} />
           <Row className="justify-content-center my-2">
             <Col md={8} lg={7} xs={12}>
               <Image

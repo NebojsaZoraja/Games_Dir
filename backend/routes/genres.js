@@ -13,7 +13,7 @@ router.get('/', asyncHandler(async (req, res) => {
     res.json(genres);
 }));
 
-//GET GENRES BY ID
+//GET GENRE BY ID
 
 router.get('/:id', [auth, admin], asyncHandler(async (req, res) => {
     const genre = await Genre.findById(req.params.id);
@@ -42,16 +42,15 @@ router.put('/:id', [auth, validateObjectId], asyncHandler(async (req, res) => {
 
     const genre = await Genre.findById(req.params.id);
 
-    if (genre) {
-        genre.name = req.body.name;
-    }
-    const updatedGenre = await genre.save();
 
     if (!genre) {
         res.status(404);
         throw new Error("The genre with the given ID was not found.");
+    } else {
+        genre.name = req.body.name;
     }
 
+    const updatedGenre = await genre.save();
     res.json(updatedGenre);
 }));
 

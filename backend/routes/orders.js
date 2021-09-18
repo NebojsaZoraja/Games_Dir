@@ -69,7 +69,7 @@ router.put('/:id/pay', auth, asyncHandler(async (req, res) => {
                 id: req.body.id,
                 status: req.body.status,
                 update_time: req.body.update_time,
-                email_addres: req.body.payer.email_addres
+                email_address: req.body.payer.email_address
             }
     } else {
         res.status(404);
