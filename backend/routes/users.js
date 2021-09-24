@@ -61,8 +61,15 @@ router.post('/', asyncHandler(async (req, res) => {
         throw new Error(error.message);
     }
 
-    const userExists = await User.findOne({ email: req.body.email });
-    if (userExists) {
+    const userEmail = await User.findOne({ email: req.body.email });
+    if (userEmail) {
+        res.status(400);
+        throw new Error('User already exists.');
+    }
+
+    const userName = await User.findOne({ name: req.body.name });
+
+    if (userName) {
         res.status(400);
         throw new Error('User already exists.');
     }
