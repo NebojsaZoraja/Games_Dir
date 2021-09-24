@@ -1,4 +1,5 @@
 import { Genre } from '../models/genreModel.js'
+import { Game } from '../models/gameModel.js';
 import express from 'express';
 import { auth, admin } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
@@ -57,14 +58,18 @@ router.put('/:id', [auth, validateObjectId], asyncHandler(async (req, res) => {
 //DELETE GENRE
 
 router.delete('/:id', [auth, admin, validateObjectId], asyncHandler(async (req, res) => {
-    const genre = await Genre.findByIdAndRemove(req.params.id);
-
-    if (!genre) {
-        res.status(404);
-        throw new Error("The genre with the given ID was not found.");
+    const game = await Game.find({ genre: req.params.id });
+    if (game.length === 0) {
+        const genre = await Genre.findByIdAndRemove(req.params.id);
+        res.json(genre);
+        if (!genre) {
+            res.status(404);
+            throw new Error("The genre with the given ID was not found.");
+        }
+    } else {
+        res.status(400);
+        throw new Error("There are games associated with this genre");
     }
-
-    res.json(genre);
 }));
 
 export { router };
